@@ -29,7 +29,6 @@ use UtfNormal\Constants;
  * @defgroup UtfNormal UtfNormal
  */
 
-define( 'NORMALIZE_ICU', function_exists( 'utf8_normalize' ) );
 define( 'NORMALIZE_INTL', function_exists( 'normalizer_normalize' ) );
 
 /**
@@ -77,13 +76,7 @@ class UtfNormal {
 	 * @return string a clean, shiny, normalized UTF-8 string
 	 */
 	static function cleanUp( $string ) {
-		if ( NORMALIZE_ICU ) {
-			$string = self::replaceForNativeNormalize( $string );
-
-			# UnicodeString constructor fails if the string ends with a
-			# head byte. Add a junk char at the end, we'll strip it off.
-			return rtrim( utf8_normalize( $string . "\x01", self::UNORM_NFC ), "\x01" );
-		} elseif ( NORMALIZE_INTL ) {
+		if ( NORMALIZE_INTL ) {
 			$string = self::replaceForNativeNormalize( $string );
 			$norm = normalizer_normalize( $string, Normalizer::FORM_C );
 			if ( $norm === null || $norm === false ) {
@@ -120,8 +113,6 @@ class UtfNormal {
 	static function toNFC( $string ) {
 		if ( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_C );
-		elseif ( NORMALIZE_ICU )
-			return utf8_normalize( $string, self::UNORM_NFC );
 		elseif ( UtfNormal::quickIsNFC( $string ) )
 			return $string;
 		else
@@ -138,8 +129,6 @@ class UtfNormal {
 	static function toNFD( $string ) {
 		if ( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_D );
-		elseif ( NORMALIZE_ICU )
-			return utf8_normalize( $string, self::UNORM_NFD );
 		elseif ( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFD( $string );
 		else
@@ -157,8 +146,6 @@ class UtfNormal {
 	static function toNFKC( $string ) {
 		if ( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_KC );
-		elseif ( NORMALIZE_ICU )
-			return utf8_normalize( $string, self::UNORM_NFKC );
 		elseif ( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFKC( $string );
 		else
@@ -176,8 +163,6 @@ class UtfNormal {
 	static function toNFKD( $string ) {
 		if ( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_KD );
-		elseif ( NORMALIZE_ICU )
-			return utf8_normalize( $string, self::UNORM_NFKD );
 		elseif ( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFKD( $string );
 		else
