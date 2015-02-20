@@ -6,7 +6,7 @@
     "authors": [
         {
             "name": "Brion Vibber",
-            "email": "brion@wikimedia.org"
+            "email": "bvibber@wikimedia.org"
         }
     ],
     "autoload": {
