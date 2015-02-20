@@ -1,0 +1,36 @@
+{
+    "name": "wikimedia/utfnormal",
+    "description": "",
+    "license": "GPL-2.0+",
+    "homepage": "https://www.mediawiki.org/wiki/utfnormal",
+    "authors": [
+        {
+            "name": "Brion Vibber",
+            "email": "brion@wikimedia.org"
+        }
+    ],
+    "autoload": {
+        "classmap": ["src/"]
+    },
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "jakub-onderka/php-parallel-lint": "0.8.*",
+        "phpunit/phpunit": "4.4.*",
+        "squizlabs/php_codesniffer": "2.1.*",
+        "mediawiki/mediawiki-codesniffer": "0.1.0",
+        "ext-mbstring": "*"
+    },
+    "scripts": {
+        "test": [
+            "parallel-lint . --exclude vendor",
+            "phpunit $PHPUNIT_ARGS"
+        ],
+        "phpcs": "phpcs $PHPCS_ARGS --standard=vendor/mediawiki/mediawiki-codesniffer/MediaWiki --ignore=vendor -v ."
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
+
