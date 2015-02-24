@@ -23,9 +23,11 @@
         "ext-mbstring": "*"
     },
     "scripts": {
+        "generate": "php scripts/generate.php",
         "test": [
             "parallel-lint . --exclude vendor",
-            "phpunit $PHPUNIT_ARGS"
+            "phpunit $PHPUNIT_ARGS",
+            "php scripts/benchmark.php"
         ],
         "phpcs": "phpcs $PHPCS_ARGS --standard=vendor/mediawiki/mediawiki-codesniffer/MediaWiki --ignore=vendor -v ."
     },
@@ -33,4 +35,3 @@
         "optimize-autoloader": true
     }
 }
-

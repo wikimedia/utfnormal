@@ -33,13 +33,42 @@ if ( PHP_SAPI != 'cli' ) {
 
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
-$in = fopen( __DIR__ . "/data/DerivedNormalizationProps.txt", "rt" );
-if ( !$in ) {
-	print "Can't open DerivedNormalizationProps.txt for reading.\n";
-	print "If necessary, fetch this file from the internet:\n";
-	print "http://www.unicode.org/Public/UNIDATA/DerivedNormalizationProps.txt\n";
-	exit( -1 );
+function download( $file, $url ) {
+	print "Downloading data from $url...\n";
+	$fp = fopen( $file, 'w+' );
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_FILE, $fp );
+	curl_exec( $ch );
+	curl_close( $ch );
+	fclose( $fp );
 }
+
+function getFilePointer( $file, $url ) {
+	if ( in_array( '--fetch', $_SERVER['argv'] ) ) {
+		download( $file, $url );
+	} elseif ( !file_exists( $file ) ) {
+		print "Can't open $file for reading.\n";
+		print "If necessary, fetch this file from the internet:\n";
+		print "$url\n";
+		print "Or re-run this script with --fetch\n";
+		exit( -1 );
+	}
+
+	$fp = fopen( $file, "rt" );
+	if ( !$fp ) {
+		// Eh?
+		print "Can't open $file for reading.\n";
+		exit( -1 );
+	}
+
+	return $fp;
+}
+
+
+$in = getFilePointer(
+	__DIR__ . "/data/DerivedNormalizationProps.txt",
+	'http://www.unicode.org/Public/UNIDATA/DerivedNormalizationProps.txt'
+);
 print "Initializing normalization quick check tables...\n";
 $checkNFC = array();
 while ( false !== ( $line = fgets( $in ) ) ) {
@@ -64,13 +93,10 @@ while ( false !== ( $line = fgets( $in ) ) ) {
 }
 fclose( $in );
 
-$in = fopen( __DIR__ . "/data/CompositionExclusions.txt", "rt" );
-if ( !$in ) {
-	print "Can't open CompositionExclusions.txt for reading.\n";
-	print "If necessary, fetch this file from the internet:\n";
-	print "http://www.unicode.org/Public/UNIDATA/CompositionExclusions.txt\n";
-	exit( -1 );
-}
+$in = getFilePointer(
+	__DIR__ . "/data/CompositionExclusions.txt",
+	'http://www.unicode.org/Public/UNIDATA/CompositionExclusions.txt'
+);
 $exclude = array();
 while ( false !== ( $line = fgets( $in ) ) ) {
 	if ( preg_match( '/^([0-9A-F]+)/i', $line, $matches ) ) {
@@ -81,14 +107,10 @@ while ( false !== ( $line = fgets( $in ) ) ) {
 }
 fclose( $in );
 
-$in = fopen( __DIR__ . "/data/UnicodeData.txt", "rt" );
-if ( !$in ) {
-	print "Can't open UnicodeData.txt for reading.\n";
-	print "If necessary, fetch this file from the internet:\n";
-	print "http://www.unicode.org/Public/UNIDATA/UnicodeData.txt\n";
-	exit( -1 );
-}
-
+$in = getFilePointer(
+	__DIR__ . "/data/UnicodeData.txt",
+	'http://www.unicode.org/Public/UNIDATA/UnicodeData.txt'
+);
 $compatibilityDecomp = array();
 $canonicalDecomp = array();
 $canonicalComp = array();
