@@ -125,7 +125,9 @@ class UtfNormalTest extends PHPUnit_Framework_TestCase {
 			$cols = explode( ';', $line );
 			$char = Utils::codepointToUtf8( hexdec( $cols[0] ) );
 			$desc = $cols[0] . ": " . $cols[1];
-			if ( $char < "\x20" || $char >= Constants::UTF8_SURROGATE_FIRST && $char <= Constants::UTF8_SURROGATE_LAST ) {
+			if ( $char < "\x20" ||
+				$char >= Constants::UTF8_SURROGATE_FIRST && $char <= Constants::UTF8_SURROGATE_LAST
+			) {
 				# Can't check NULL with the ICU plugin, as null bytes fail in C land.
 				# Skip other control characters, as we strip them for XML safety.
 				# Surrogates are illegal on their own or in UTF-8, ignore.

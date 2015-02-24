@@ -532,7 +532,10 @@ class UtfNormal {
 							| ( ord( $c[2] ) & 0x3f ) )
 						- Constants::UNICODE_HANGUL_FIRST;
 					$l = intval( $index / Constants::UNICODE_HANGUL_NCOUNT );
-					$v = intval( ( $index % Constants::UNICODE_HANGUL_NCOUNT ) / Constants::UNICODE_HANGUL_TCOUNT );
+					$v = intval(
+						( $index % Constants::UNICODE_HANGUL_NCOUNT )
+						/ Constants::UNICODE_HANGUL_TCOUNT
+					);
 					$t = $index % Constants::UNICODE_HANGUL_TCOUNT;
 					$out .= "\xe1\x84" . chr( 0x80 + $l ) . "\xe1\x85" . chr( 0xa1 + $v );
 					if ( $t >= 25 ) {

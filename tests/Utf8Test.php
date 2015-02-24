@@ -45,7 +45,6 @@ class Utf8Test extends PHPUnit_Framework_TestCase {
 			exit( -1 );
 		}
 
-
 		$ignore = array(
 			# These two lines actually seem to be corrupt
 			'2.1.1', '2.2.1' );

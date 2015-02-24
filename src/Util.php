@@ -1,5 +1,6 @@
 <?php
 namespace UtfNormal;
+
 use InvalidArgumentException;
 
 /**
