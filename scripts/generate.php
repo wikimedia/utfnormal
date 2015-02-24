@@ -210,10 +210,10 @@ if ( $out ) {
  */
 // @codingStandardsIgnoreFile
 
-UtfNormal::\$utfCombiningClass = unserialize( '$serCombining' );
-UtfNormal::\$utfCanonicalComp = unserialize( '$serComp' );
-UtfNormal::\$utfCanonicalDecomp = unserialize( '$serCanon' );
-UtfNormal::\$utfCheckNFC = unserialize( '$serCheckNFC' );
+UtfNormal\Validator::\$utfCombiningClass = unserialize( '$serCombining' );
+UtfNormal\Validator::\$utfCanonicalComp = unserialize( '$serComp' );
+UtfNormal\Validator::\$utfCanonicalDecomp = unserialize( '$serCanon' );
+UtfNormal\Validator::\$utfCheckNFC = unserialize( '$serCheckNFC' );
 \n";
 	fputs( $out, $outdata );
 	fclose( $out );
@@ -235,7 +235,7 @@ if ( $out ) {
  */
 // @codingStandardsIgnoreFile
 
-UtfNormal::\$utfCompatibilityDecomp = unserialize( '$serCompat' );
+UtfNormal\Validator::\$utfCompatibilityDecomp = unserialize( '$serCompat' );
 \n";
 	fputs( $out, $outdata );
 	fclose( $out );

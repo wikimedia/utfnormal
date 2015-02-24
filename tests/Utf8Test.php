@@ -1,4 +1,6 @@
 <?php
+use UtfNormal\Validator;
+
 /**
  * Runs the UTF-8 decoder test at:
  * http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
@@ -101,7 +103,7 @@ class Utf8Test extends PHPUnit_Framework_TestCase {
 	 */
 	function testLine( $test, $line, $columns, $exceptions ) {
 		$stripped = $line;
-		UtfNormal::quickisNFCVerify( $stripped );
+		Validator::quickisNFCVerify( $stripped );
 
 		$same = ( $line == $stripped );
 		$len = mb_strlen( substr( $stripped, 0, strpos( $stripped, '|' ) ), 'UTF-8' );

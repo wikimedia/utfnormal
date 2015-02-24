@@ -1,5 +1,6 @@
 <?php
 use UtfNormal\Constants;
+use UtfNormal\Validator;
 use UtfNormal\Utils;
 
 /**
@@ -61,43 +62,43 @@ class UtfNormalTest extends PHPUnit_Framework_TestCase {
 	}
 
 	function assertNFC( $c, $desc ) {
-		$this->assertStringEquals( $c[2], UtfNormal::toNFC( $c[1] ), $desc );
-		$this->assertStringEquals( $c[2], UtfNormal::toNFC( $c[2] ), $desc );
-		$this->assertStringEquals( $c[2], UtfNormal::toNFC( $c[3] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::toNFC( $c[4] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::toNFC( $c[5] ), $desc );
+		$this->assertStringEquals( $c[2], Validator::toNFC( $c[1] ), $desc );
+		$this->assertStringEquals( $c[2], Validator::toNFC( $c[2] ), $desc );
+		$this->assertStringEquals( $c[2], Validator::toNFC( $c[3] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::toNFC( $c[4] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::toNFC( $c[5] ), $desc );
 	}
 
 	function assertNFD( $c, $desc ) {
-		$this->assertStringEquals( $c[3], UtfNormal::toNFD( $c[1] ), $desc );
-		$this->assertStringEquals( $c[3], UtfNormal::toNFD( $c[2] ), $desc );
-		$this->assertStringEquals( $c[3], UtfNormal::toNFD( $c[3] ), $desc );
-		$this->assertStringEquals( $c[5], UtfNormal::toNFD( $c[4] ), $desc );
-		$this->assertStringEquals( $c[5], UtfNormal::toNFD( $c[5] ), $desc );
+		$this->assertStringEquals( $c[3], Validator::toNFD( $c[1] ), $desc );
+		$this->assertStringEquals( $c[3], Validator::toNFD( $c[2] ), $desc );
+		$this->assertStringEquals( $c[3], Validator::toNFD( $c[3] ), $desc );
+		$this->assertStringEquals( $c[5], Validator::toNFD( $c[4] ), $desc );
+		$this->assertStringEquals( $c[5], Validator::toNFD( $c[5] ), $desc );
 	}
 
 	function assertNFKC( $c, $desc ) {
-		$this->assertStringEquals( $c[4], UtfNormal::toNFKC( $c[1] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::toNFKC( $c[2] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::toNFKC( $c[3] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::toNFKC( $c[4] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::toNFKC( $c[5] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::toNFKC( $c[1] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::toNFKC( $c[2] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::toNFKC( $c[3] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::toNFKC( $c[4] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::toNFKC( $c[5] ), $desc );
 	}
 
 	function assertNFKD( $c, $desc ) {
-		$this->assertStringEquals( $c[5], UtfNormal::toNFKD( $c[1] ), $desc );
-		$this->assertStringEquals( $c[5], UtfNormal::toNFKD( $c[2] ), $desc );
-		$this->assertStringEquals( $c[5], UtfNormal::toNFKD( $c[3] ), $desc );
-		$this->assertStringEquals( $c[5], UtfNormal::toNFKD( $c[4] ), $desc );
-		$this->assertStringEquals( $c[5], UtfNormal::toNFKD( $c[5] ), $desc );
+		$this->assertStringEquals( $c[5], Validator::toNFKD( $c[1] ), $desc );
+		$this->assertStringEquals( $c[5], Validator::toNFKD( $c[2] ), $desc );
+		$this->assertStringEquals( $c[5], Validator::toNFKD( $c[3] ), $desc );
+		$this->assertStringEquals( $c[5], Validator::toNFKD( $c[4] ), $desc );
+		$this->assertStringEquals( $c[5], Validator::toNFKD( $c[5] ), $desc );
 	}
 
 	function assertCleanUp( $c, $desc ) {
-		$this->assertStringEquals( $c[2], UtfNormal::cleanUp( $c[1] ), $desc );
-		$this->assertStringEquals( $c[2], UtfNormal::cleanUp( $c[2] ), $desc );
-		$this->assertStringEquals( $c[2], UtfNormal::cleanUp( $c[3] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::cleanUp( $c[4] ), $desc );
-		$this->assertStringEquals( $c[4], UtfNormal::cleanUp( $c[5] ), $desc );
+		$this->assertStringEquals( $c[2], Validator::cleanUp( $c[1] ), $desc );
+		$this->assertStringEquals( $c[2], Validator::cleanUp( $c[2] ), $desc );
+		$this->assertStringEquals( $c[2], Validator::cleanUp( $c[3] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::cleanUp( $c[4] ), $desc );
+		$this->assertStringEquals( $c[4], Validator::cleanUp( $c[5] ), $desc );
 	}
 
 	/**
@@ -153,11 +154,11 @@ class UtfNormalTest extends PHPUnit_Framework_TestCase {
 		foreach ( $testCases as $case ) {
 			$char = $case[0];
 			$desc = $case[1];
-			$this->assertStringEquals( $char, UtfNormal::toNFC( $char ), $desc );
-			$this->assertStringEquals( $char, UtfNormal::toNFD( $char ), $desc );
-			$this->assertStringEquals( $char, UtfNormal::toNFKC( $char ), $desc );
-			$this->assertStringEquals( $char, UtfNormal::toNFKD( $char ), $desc );
-			$this->assertStringEquals( $char, UtfNormal::cleanUp( $char ), $desc );
+			$this->assertStringEquals( $char, Validator::toNFC( $char ), $desc );
+			$this->assertStringEquals( $char, Validator::toNFD( $char ), $desc );
+			$this->assertStringEquals( $char, Validator::toNFKC( $char ), $desc );
+			$this->assertStringEquals( $char, Validator::toNFKD( $char ), $desc );
+			$this->assertStringEquals( $char, Validator::cleanUp( $char ), $desc );
 		}
 	}
 }

@@ -24,6 +24,8 @@
  * @ingroup UtfNormal
  */
 
+use UtfNormal\Validator;
+
 if ( PHP_SAPI != 'cli' ) {
 	die( "Run me from the command line please.\n" );
 }
@@ -39,8 +41,8 @@ $testfiles = array(
 	__DIR__ . '/testdata/tokyo.txt' => 'Japanese text',
 	__DIR__ . '/testdata/young.txt' => 'Korean text'
 );
-$normalizer = new UtfNormal;
-UtfNormal::loadData();
+$normalizer = new Validator;
+Validator::loadData();
 foreach ( $testfiles as $file => $desc ) {
 	benchmarkTest( $normalizer, $file, $desc );
 }
@@ -79,7 +81,7 @@ function benchmarkForm( &$u, &$data, $form ) {
 	#$start = microtime( true );
 	for ( $i = 0; $i < BENCH_CYCLES; $i++ ) {
 		$start = microtime( true );
-		$out = $u->$form( $data, UtfNormal::$utfCanonicalDecomp );
+		$out = $u->$form( $data, Validator::$utfCanonicalDecomp );
 		$deltas[] = ( microtime( true ) - $start );
 	}
 	#$delta = (microtime( true ) - $start) / BENCH_CYCLES;

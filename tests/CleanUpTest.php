@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for UtfNormal::cleanUp() function.
+ * Tests for UtfNormal\UtfNormal::cleanUp() function.
  *
  * Copyright © 2004 Brion Vibber <brion@pobox.com>
  * https://www.mediawiki.org/
@@ -23,17 +23,18 @@
  * @file
  */
 use UtfNormal\Constants;
+use UtfNormal\Validator;
 use UtfNormal\Utils;
 
 /**
- * Additional tests for UtfNormal::cleanUp() function, inclusion
+ * Additional tests for UtfNormal\Validator::cleanUp() function, inclusion
  * regression checks for known problems.
  * Requires PHPUnit.
  *
  * @ingroup UtfNormal
  * @group Large
  *
- * @todo covers tags, will be UtfNormal::cleanUp once the below is resolved
+ * @todo covers tags, will be UtfNormal\Validator::cleanUp once the below is resolved
  * @todo split me into test methods and providers per the below comment
  * @todo Document individual tests
  *
@@ -44,7 +45,7 @@ use UtfNormal\Utils;
 class CleanUpTest extends PHPUnit_Framework_TestCase {
 	public function testAscii() {
 		$text = 'This is plain ASCII text.';
-		$this->assertEquals( $text, UtfNormal::cleanUp( $text ) );
+		$this->assertEquals( $text, Validator::cleanUp( $text ) );
 	}
 
 	public function testNull() {
@@ -52,18 +53,18 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 		$expect = "a \xef\xbf\xbd null";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 
 	public function testLatin() {
 		$text = "L'\xc3\xa9cole";
-		$this->assertEquals( $text, UtfNormal::cleanUp( $text ) );
+		$this->assertEquals( $text, Validator::cleanUp( $text ) );
 	}
 
 	public function testLatinNormal() {
 		$text = "L'e\xcc\x81cole";
 		$expect = "L'\xc3\xa9cole";
-		$this->assertEquals( $expect, UtfNormal::cleanUp( $text ) );
+		$this->assertEquals( $expect, Validator::cleanUp( $text ) );
 	}
 
 	/**
@@ -73,7 +74,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 		$rep = Constants::UTF8_REPLACEMENT;
 		for ( $i = 0x0; $i < Constants::UNICODE_MAX; $i++ ) {
 			$char = Utils::codepointToUtf8( $i );
-			$clean = UtfNormal::cleanUp( $char );
+			$clean = Validator::cleanUp( $char );
 			$x = sprintf( "%04X", $i );
 
 			if ( $i % 0x1000 == 0 ) {
@@ -87,10 +88,10 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 				( $i > Constants::UNICODE_SURROGATE_LAST && $i < 0xfffe ) ||
 				( $i > 0xffff && $i <= Constants::UNICODE_MAX )
 			) {
-				if ( isset( UtfNormal::$utfCanonicalComp[$char] )
-					|| isset( UtfNormal::$utfCanonicalDecomp[$char] )
+				if ( isset( Validator::$utfCanonicalComp[$char] )
+					|| isset( Validator::$utfCanonicalDecomp[$char] )
 				) {
-					$comp = UtfNormal::NFC( $char );
+					$comp = Validator::NFC( $char );
 					$this->assertEquals(
 						bin2hex( $comp ),
 						bin2hex( $clean ),
@@ -122,7 +123,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 	function testBytes( $head, $tail ) {
 		for ( $i = 0x0; $i < 256; $i++ ) {
 			$char = $head . chr( $i ) . $tail;
-			$clean = UtfNormal::cleanUp( $char );
+			$clean = Validator::cleanUp( $char );
 			$x = sprintf( "%02X", $i );
 
 			if ( $i == 0x0009 ||
@@ -157,13 +158,13 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 		for ( $first = 0xc0; $first < 0x100; $first += 2 ) {
 			for ( $second = 0x80; $second < 0x100; $second += 2 ) {
 				$char = $head . chr( $first ) . chr( $second ) . $tail;
-				$clean = UtfNormal::cleanUp( $char );
+				$clean = Validator::cleanUp( $char );
 				$x = sprintf( "%02X,%02X", $first, $second );
 				if ( $first > 0xc1 &&
 					$first < 0xe0 &&
 					$second < 0xc0
 				) {
-					$norm = UtfNormal::NFC( $char );
+					$norm = Validator::NFC( $char );
 					$this->assertEquals(
 						bin2hex( $norm ),
 						bin2hex( $clean ),
@@ -204,7 +205,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 				#for( $third = 0x80; $third < 0x100; $third++ ) {
 				for ( $third = 0x80; $third < 0x81; $third++ ) {
 					$char = $head . chr( $first ) . chr( $second ) . chr( $third ) . $tail;
-					$clean = UtfNormal::cleanUp( $char );
+					$clean = Validator::cleanUp( $char );
 					$x = sprintf( "%02X,%02X,%02X", $first, $second, $third );
 
 					if ( $first >= 0xe0 &&
@@ -226,20 +227,20 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 								"Surrogate triplet $x should be rejected" );
 						} else {
 							$this->assertEquals(
-								bin2hex( UtfNormal::NFC( $char ) ),
+								bin2hex( Validator::NFC( $char ) ),
 								bin2hex( $clean ),
 								"Triplet $x should be intact" );
 						}
 					} elseif ( $first > 0xc1 && $first < 0xe0 && $second < 0xc0 ) {
 						$this->assertEquals(
-							bin2hex( UtfNormal::NFC( $head . chr( $first ) .
+							bin2hex( Validator::NFC( $head . chr( $first ) .
 									chr( $second ) ) . Constants::UTF8_REPLACEMENT . $tail ),
 							bin2hex( $clean ),
 							"Valid 2-byte $x + broken tail" );
 					} elseif ( $second > 0xc1 && $second < 0xe0 && $third < 0xc0 ) {
 						$this->assertEquals(
 							bin2hex( $head . Constants::UTF8_REPLACEMENT .
-								UtfNormal::NFC( chr( $second ) . chr( $third ) . $tail ) ),
+								Validator::NFC( chr( $second ) . chr( $third ) . $tail ) ),
 							bin2hex( $clean ),
 							"Broken head + valid 2-byte $x" );
 					} elseif ( ( $first > 0xfd || $second > 0xfd ) &&
@@ -291,7 +292,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 
 	public function testInterposeRegression() {
@@ -325,7 +326,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 
 	public function testOverlongRegression() {
@@ -349,7 +350,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 			"\xef\xbf\xbd";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 
 	public function testSurrogateRegression() {
@@ -363,7 +364,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 			"\xef\xbf\xbd";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 
 	public function testBomRegression() {
@@ -377,7 +378,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 			"\x59";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 
 	public function testForbiddenRegression() {
@@ -385,7 +386,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 		$expect = "\xef\xbf\xbd";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 
 	public function testHangulRegression() {
@@ -394,6 +395,6 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 		$expect = $text; # Should *not* change.
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( UtfNormal::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) ) );
 	}
 }

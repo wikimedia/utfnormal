@@ -6,12 +6,12 @@ utfnormal
 utfnormal is a library that contains Unicode normalization routines, including
 pure PHP implementations.
 
-The main function to care about is UtfNormal::toNFC(); this will convert
+The main function to care about is UtfNormal\Validator::toNFC(); this will convert
 a given UTF-8 string to Normalization Form C if it's not already such.
 The function assumes that the input string is already valid UTF-8; if there
 are corrupt characters this may produce erroneous results.
 
-To also check for illegal characters, use UtfNormal::cleanUp(). This will
+To also check for illegal characters, use UtfNormal\Validator::cleanUp(). This will
 strip illegal UTF-8 sequences and characters that are illegal in XML, and
 if necessary convert to normalization form C.
 
