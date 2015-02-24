@@ -27,9 +27,9 @@
         "test": [
             "parallel-lint . --exclude vendor",
             "phpunit $PHPUNIT_ARGS",
+            "phpcs $PHPCS_ARGS --standard=vendor/mediawiki/mediawiki-codesniffer/MediaWiki --ignore=vendor -v .",
             "php scripts/benchmark.php"
-        ],
-        "phpcs": "phpcs $PHPCS_ARGS --standard=vendor/mediawiki/mediawiki-codesniffer/MediaWiki --ignore=vendor -v ."
+        ]
     },
     "config": {
         "optimize-autoloader": true

@@ -250,7 +250,10 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 					) {
 						# fe and ff are not legal head bytes -- expect three replacement chars
 						$this->assertEquals(
-							bin2hex( $head . Constants::UTF8_REPLACEMENT . Constants::UTF8_REPLACEMENT . Constants::UTF8_REPLACEMENT . $tail ),
+							bin2hex(
+								$head . Constants::UTF8_REPLACEMENT .
+								Constants::UTF8_REPLACEMENT . Constants::UTF8_REPLACEMENT . $tail
+							),
 							bin2hex( $clean ),
 							"Forbidden triplet $x should be rejected" );
 					} elseif ( $first > 0xc2 && $second < 0xc0 && $third < 0xc0 ) {
