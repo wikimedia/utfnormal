@@ -105,7 +105,7 @@ class Utf8Test extends PHPUnit_Framework_TestCase {
 		UtfNormal::quickisNFCVerify( $stripped );
 
 		$same = ( $line == $stripped );
-		$len = mb_strlen( substr( $stripped, 0, strpos( $stripped, '|' ) ) );
+		$len = mb_strlen( substr( $stripped, 0, strpos( $stripped, '|' ) ), 'UTF-8' );
 		if ( $len == 0 ) {
 			$len = strlen( substr( $stripped, 0, strpos( $stripped, '|' ) ) );
 		}
