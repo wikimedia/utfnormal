@@ -4,16 +4,18 @@ utfnormal
 =========
 
 utfnormal is a library that contains Unicode normalization routines, including
-pure PHP implementations.
+both pure PHP implementations and automatic use of the 'intl' PHP extension when
+ present.
 
-The main function to care about is UtfNormal\Validator::toNFC(); this will convert
-a given UTF-8 string to Normalization Form C if it's not already such.
-The function assumes that the input string is already valid UTF-8; if there
-are corrupt characters this may produce erroneous results.
-
-To also check for illegal characters, use UtfNormal\Validator::cleanUp(). This will
+The main function to care about is UtfNormal\Validator::cleanUp(). This will
 strip illegal UTF-8 sequences and characters that are illegal in XML, and
 if necessary convert to normalization form C.
+
+If you know the string is already valid UTF-8, you can directly call
+UtfNormal\Validator::toNFC(), toNFK(), or toNFKC(); this will convert a given
+UTF-8 string to Normalization Form C, K, or KC if it's not already such.
+The function assumes that the input string is already valid UTF-8; if there
+are corrupt characters this may produce erroneous results.
 
 Performance is kind of stinky in absolute terms, though it should be speedy
 on pure ASCII text. ;) On text that can be determined quickly to already be
@@ -22,6 +24,7 @@ particularly for Korean text (the hangul decomposition/composition code is
 extra slow).
 
 Bugs should be filed in [Wikimedia's Phabricator] under the "utfnormal" project.
+
 
 Regenerating data tables
 ------------------------
@@ -51,6 +54,7 @@ http://php.net/manual/en/intro.intl.php
 Older versions of this library supported a one-off custom PHP extension,
 which has been dropped. If you were using this, please migrate to the
 intl extension.
+
 
 History
 -------
