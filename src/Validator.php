@@ -48,17 +48,6 @@ define( 'NORMALIZE_INTL', function_exists( 'normalizer_normalize' ) );
  * @ingroup UtfNormal
  */
 class Validator {
-	/**
-	 * For using the ICU wrapper
-	 */
-	const UNORM_NONE = 1;
-	const UNORM_NFD = 2;
-	const UNORM_NFKD = 3;
-	const UNORM_NFC = 4;
-	const UNORM_NFKC = 5;
-	const UNORM_FCD = 6;
-	const UNORM_DEFAULT = self::UNORM_NFC;
-
 	public static $utfCombiningClass = null;
 	public static $utfCanonicalComp = null;
 	public static $utfCanonicalDecomp = null;
