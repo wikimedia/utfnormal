@@ -470,7 +470,7 @@ class Validator {
 	 */
 	static function NFKD ( $string ) {
 		if ( !isset( self::$utfCompatibilityDecomp ) ) {
-			require_once 'UtfNormalDataK.inc';
+			require_once __DIR__ . '/UtfNormalDataK.inc';
 		}
 
 		return self::fastCombiningSort(
