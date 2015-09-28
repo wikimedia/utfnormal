@@ -1,37 +1,38 @@
 {
-    "name": "wikimedia/utfnormal",
-    "description": "Contains Unicode normalization routines, including both pure PHP implementations and automatic use of the 'intl' PHP extension when present",
-    "license": "GPL-2.0+",
-    "homepage": "https://www.mediawiki.org/wiki/utfnormal",
-    "authors": [
-        {
-            "name": "Brion Vibber",
-            "email": "bvibber@wikimedia.org"
-        }
-    ],
-    "autoload": {
-        "classmap": ["src/"]
-    },
-    "require": {
-        "php": ">=5.3.3"
-    },
-    "require-dev": {
-        "jakub-onderka/php-parallel-lint": "0.8.*",
-        "phpunit/phpunit": "4.6.*",
-        "squizlabs/php_codesniffer": "2.2.*",
-        "mediawiki/mediawiki-codesniffer": "0.1.0",
-        "ext-mbstring": "*"
-    },
-    "scripts": {
-        "generate": "php scripts/generate.php",
-        "test": [
-            "parallel-lint . --exclude vendor",
-            "phpunit $PHPUNIT_ARGS",
-            "phpcs -p",
-            "php scripts/benchmark.php"
-        ]
-    },
-    "config": {
-        "optimize-autoloader": true
-    }
+	"name": "wikimedia/utfnormal",
+	"description": "Contains Unicode normalization routines, including both pure PHP implementations and automatic use of the 'intl' PHP extension when present",
+	"license": "GPL-2.0+",
+	"homepage": "https://www.mediawiki.org/wiki/utfnormal",
+	"authors": [
+		{
+			"name": "Brion Vibber",
+			"email": "bvibber@wikimedia.org"
+		}
+	],
+	"autoload": {
+		"classmap": [
+			"src/"
+		]
+	},
+	"require": {
+		"php": ">=5.3.3"
+	},
+	"require-dev": {
+		"jakub-onderka/php-parallel-lint": "0.8.*",
+		"phpunit/phpunit": "4.6.*",
+		"mediawiki/mediawiki-codesniffer": "0.4.0",
+		"ext-mbstring": "*"
+	},
+	"scripts": {
+		"generate": "php scripts/generate.php",
+		"test": [
+			"parallel-lint . --exclude vendor",
+			"phpunit $PHPUNIT_ARGS",
+			"phpcs -p",
+			"php scripts/benchmark.php"
+		]
+	},
+	"config": {
+		"optimize-autoloader": true
+	}
 }
