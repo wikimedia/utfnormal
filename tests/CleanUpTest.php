@@ -109,12 +109,12 @@ class CleanUpTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public static function provideAllBytes() {
-		return array(
-			array( '', '' ),
-			array( 'x', '' ),
-			array( '', 'x' ),
-			array( 'x', 'x' ),
-		);
+		return [
+			[ '', '' ],
+			[ 'x', '' ],
+			[ '', 'x' ],
+			[ 'x', 'x' ],
+		];
 	}
 
 	/**

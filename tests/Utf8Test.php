@@ -33,7 +33,7 @@ class Utf8Test extends PHPUnit_Framework_TestCase {
 
 		$columns = 0;
 		while ( false !== ( $line = fgets( $in ) ) ) {
-			$matches = array();
+			$matches = [];
 			if ( preg_match( '/^(Here come the tests:\s*)\|$/', $line, $matches ) ) {
 				$columns = strpos( $line, '|' );
 				break;
@@ -47,28 +47,28 @@ class Utf8Test extends PHPUnit_Framework_TestCase {
 			exit( -1 );
 		}
 
-		$ignore = array(
+		$ignore = [
 			# These two lines actually seem to be corrupt
-			'2.1.1', '2.2.1' );
+			'2.1.1', '2.2.1' ];
 
-		$exceptions = array(
+		$exceptions = [
 			# Tests that should mark invalid characters due to using long
 			# sequences beyond what is now considered legal.
 			'2.1.5', '2.1.6', '2.2.4', '2.2.5', '2.2.6', '2.3.5',
 
 			# Literal 0xffff, which is illegal
-			'2.2.3' );
+			'2.2.3' ];
 
-		$longTests = array(
+		$longTests = [
 			# These tests span multiple lines
 			'3.1.9', '3.2.1', '3.2.2', '3.2.3', '3.2.4', '3.2.5',
-			'3.4' );
+			'3.4' ];
 
-		$testCases = array();
+		$testCases = [];
 
 		$section = null;
 		while ( false !== ( $line = fgets( $in ) ) ) {
-			$matches = array();
+			$matches = [];
 			if ( preg_match( '/^(\d+)\s+(.*?)\s*\|/', $line, $matches ) ) {
 				continue;
 			}
@@ -85,17 +85,16 @@ class Utf8Test extends PHPUnit_Framework_TestCase {
 					for ( $line = fgets( $in ); !preg_match( '/^\s+\|/', $line ); $line = fgets( $in ) ) {
 						// @codingStandardsIgnoreEnd
 
-						$testCases[] = array( $test, $line, $columns, $exceptions );
+						$testCases[] = [ $test, $line, $columns, $exceptions ];
 					}
 				} else {
-					$testCases[] = array( $test, $line, $columns, $exceptions );
+					$testCases[] = [ $test, $line, $columns, $exceptions ];
 				}
 			}
 		}
 
 		return $testCases;
 	}
-
 
 	/**
 	 * @dataProvider provideLines

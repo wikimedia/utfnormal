@@ -32,16 +32,18 @@ use UtfNormal\Utils;
 
 class UtfNormalTest extends PHPUnit_Framework_TestCase {
 
-	protected static $testedChars = array();
+	protected static $testedChars = [];
 
 	public static function provideNormalizationTest() {
 		$in = fopen( __DIR__ . '/data/NormalizationTest.txt', "rt" );
 
-		$testCases = array();
+		$testCases = [];
 		while ( false !== ( $line = fgets( $in ) ) ) {
 			list( $data, $comment ) = explode( '#', $line );
-			if ( $data === '' ) continue;
-			$matches = array();
+			if ( $data === '' ) {
+				continue;
+			}
+			$matches = [];
 			if ( preg_match( '/@Part([\d])/', $data, $matches ) ) {
 				continue;
 			}
@@ -50,11 +52,11 @@ class UtfNormalTest extends PHPUnit_Framework_TestCase {
 			array_unshift( $columns, '' );
 
 			self::$testedChars[$columns[1]] = true;
-			$testCases[] = array( $columns, $comment );
+			$testCases[] = [ $columns, $comment ];
 		}
 		fclose( $in );
 
-		return array( array( $testCases ) );
+		return [ [ $testCases ] ];
 	}
 
 	function assertStringEquals( $a, $b, $desc ) {
@@ -121,7 +123,7 @@ class UtfNormalTest extends PHPUnit_Framework_TestCase {
 
 	public static function provideUnicodeData() {
 		$in = fopen( __DIR__ . '/data/UnicodeData.txt', "rt" );
-		$testCases = array();
+		$testCases = [];
 		while ( false !== ( $line = fgets( $in ) ) ) {
 			$cols = explode( ';', $line );
 			$char = Utils::codepointToUtf8( hexdec( $cols[0] ) );
@@ -135,12 +137,12 @@ class UtfNormalTest extends PHPUnit_Framework_TestCase {
 				continue;
 			}
 			if ( empty( self::$testedChars[$char] ) ) {
-				$testCases[] = array( $char, $desc );
+				$testCases[] = [ $char, $desc ];
 			}
 		}
 		fclose( $in );
 
-		return array( array( $testCases ) );
+		return [ [ $testCases ] ];
 	}
 
 	/**
