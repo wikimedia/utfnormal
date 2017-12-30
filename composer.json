@@ -20,7 +20,7 @@
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "^0.9.2",
 		"phpunit/phpunit": "^4.8",
-		"mediawiki/mediawiki-codesniffer": "14.1.0",
+		"mediawiki/mediawiki-codesniffer": "15.0.0",
 		"ext-mbstring": "*"
 	},
 	"scripts": {
@@ -31,7 +31,9 @@
 			"phpunit",
 			"php scripts/benchmark.php"
 		],
-		"fix": "phpcbf"
+		"fix": [
+			"phpcbf"
+		]
 	},
 	"config": {
 		"optimize-autoloader": true
