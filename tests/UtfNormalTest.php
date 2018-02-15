@@ -30,7 +30,7 @@ use UtfNormal\Utils;
  * @group large
  */
 
-class UtfNormalTest extends PHPUnit_Framework_TestCase {
+class UtfNormalTest extends PHPUnit\Framework\TestCase {
 
 	protected static $testedChars = [];
 

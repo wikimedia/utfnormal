@@ -27,7 +27,7 @@ use UtfNormal\Validator;
  * @ingroup UtfNormal
  */
 
-class Utf8Test extends PHPUnit_Framework_TestCase {
+class Utf8Test extends PHPUnit\Framework\TestCase {
 	public static function provideLines() {
 		$in = fopen( __DIR__ . '/data/UTF-8-test.txt', "rt" );
 

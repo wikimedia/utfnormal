@@ -42,7 +42,7 @@ use UtfNormal\Utils;
  * to use data providers (bug 46561).
  * @codeCoverageIgnore
  */
-class CleanUpTest extends PHPUnit_Framework_TestCase {
+class CleanUpTest extends PHPUnit\Framework\TestCase {
 	public function testAscii() {
 		$text = 'This is plain ASCII text.';
 		$this->assertEquals( $text, Validator::cleanUp( $text ) );
