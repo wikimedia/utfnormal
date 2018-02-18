@@ -1,7 +1,7 @@
 {
 	"name": "wikimedia/utfnormal",
 	"description": "Contains Unicode normalization routines, including both pure PHP implementations and automatic use of the 'intl' PHP extension when present",
-	"license": "GPL-2.0+",
+	"license": "GPL-2.0-or-later",
 	"homepage": "https://www.mediawiki.org/wiki/utfnormal",
 	"authors": [
 		{
