@@ -1,8 +1,4 @@
 <?php
-use UtfNormal\Constants;
-use UtfNormal\Validator;
-use UtfNormal\Utils;
-
 /**
  * Implements the conformance test at:
  * http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
@@ -26,10 +22,16 @@ use UtfNormal\Utils;
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
+ */
+
+use UtfNormal\Constants;
+use UtfNormal\Validator;
+use UtfNormal\Utils;
+
+/**
  * @group UtfNormal
  * @group large
  */
-
 class UtfNormalTest extends PHPUnit\Framework\TestCase {
 
 	protected static $testedChars = [];
