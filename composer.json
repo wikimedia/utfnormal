@@ -29,7 +29,7 @@
 	"scripts": {
 		"generate": "php scripts/generate.php",
 		"test": [
-			"parallel-lint . --exclude vendor",
+			"parallel-lint . --exclude vendor -e php,inc",
 			"phpunit",
 			"covers-validator",
 			"phpcs -sp",
