@@ -25,7 +25,6 @@
  */
 
 use UtfNormal\Constants;
-use UtfNormal\Utils;
 use UtfNormal\Validator;
 
 /**
@@ -128,7 +127,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 		$testCases = [];
 		while ( false !== ( $line = fgets( $in ) ) ) {
 			$cols = explode( ';', $line );
-			$char = Utils::codepointToUtf8( hexdec( $cols[0] ) );
+			$char = mb_chr( hexdec( $cols[0] ) );
 			$desc = $cols[0] . ": " . $cols[1];
 			if ( $char < "\x20" ||
 				$char >= Constants::UTF8_SURROGATE_FIRST && $char <= Constants::UTF8_SURROGATE_LAST

@@ -23,7 +23,6 @@
  * @file
  */
 use UtfNormal\Constants;
-use UtfNormal\Utils;
 use UtfNormal\Validator;
 
 /**
@@ -74,7 +73,7 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 	public function XtestAllChars() {
 		$rep = Constants::UTF8_REPLACEMENT;
 		for ( $i = 0x0; $i < Constants::UNICODE_MAX; $i++ ) {
-			$char = Utils::codepointToUtf8( $i );
+			$char = mb_chr( $i );
 			$clean = Validator::cleanUp( $char );
 			$x = sprintf( "%04X", $i );
 
