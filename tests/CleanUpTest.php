@@ -23,8 +23,8 @@
  * @file
  */
 use UtfNormal\Constants;
-use UtfNormal\Validator;
 use UtfNormal\Utils;
+use UtfNormal\Validator;
 
 /**
  * Additional tests for UtfNormal\Validator::cleanUp() function, inclusion

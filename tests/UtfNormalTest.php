@@ -25,8 +25,8 @@
  */
 
 use UtfNormal\Constants;
-use UtfNormal\Validator;
 use UtfNormal\Utils;
+use UtfNormal\Validator;
 
 /**
  * @group UtfNormal
@@ -62,7 +62,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 	}
 
 	function assertStringEquals( $a, $b, $desc ) {
-		$this->assertEquals( 0, strcmp( $a, $b ), $desc );
+		$this->assertSame( 0, strcmp( $a, $b ), $desc );
 	}
 
 	function assertNFC( $c, $desc ) {
