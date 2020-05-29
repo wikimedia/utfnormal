@@ -116,7 +116,7 @@ class Utf8Test extends PHPUnit\Framework\TestCase {
 
 		$ok &= ( $columns == $len );
 
-		$this->assertEquals( 1, $ok );
+		$this->assertSame( 1, $ok );
 	}
 
 }
