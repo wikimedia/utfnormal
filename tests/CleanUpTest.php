@@ -53,7 +53,8 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 		$expect = "a \xef\xbf\xbd null";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( Validator::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) )
+		);
 	}
 
 	public function testLatin() {
@@ -70,7 +71,7 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 	/**
 	 * This test is *very* expensive!
 	 */
-	function XtestAllChars() {
+	public function XtestAllChars() {
 		$rep = Constants::UTF8_REPLACEMENT;
 		for ( $i = 0x0; $i < Constants::UNICODE_MAX; $i++ ) {
 			$char = Utils::codepointToUtf8( $i );
@@ -95,12 +96,14 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 					$this->assertEquals(
 						bin2hex( $comp ),
 						bin2hex( $clean ),
-						"U+$x should be decomposed" );
+						"U+$x should be decomposed"
+					);
 				} else {
 					$this->assertEquals(
 						bin2hex( $char ),
 						bin2hex( $clean ),
-						"U+$x should be intact" );
+						"U+$x should be intact"
+					);
 				}
 			} else {
 				$this->assertEquals( bin2hex( $rep ), bin2hex( $clean ), $x );
@@ -120,7 +123,7 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider provideAllBytes
 	 */
-	function testBytes( $head, $tail ) {
+	public function testBytes( $head, $tail ) {
 		for ( $i = 0x0; $i < 256; $i++ ) {
 			$char = $head . chr( $i ) . $tail;
 			$clean = Validator::cleanUp( $char );
@@ -134,7 +137,8 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 				$this->assertEquals(
 					bin2hex( $char ),
 					bin2hex( $clean ),
-					"ASCII byte $x should be intact" );
+					"ASCII byte $x should be intact"
+				);
 				if ( $char != $clean ) {
 					return;
 				}
@@ -143,7 +147,8 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 				$this->assertEquals(
 					bin2hex( $norm ),
 					bin2hex( $clean ),
-					"Forbidden byte $x should be rejected" );
+					"Forbidden byte $x should be rejected"
+				);
 				if ( $norm != $clean ) {
 					return;
 				}
@@ -154,7 +159,7 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider provideAllBytes
 	 */
-	function testDoubleBytes( $head, $tail ) {
+	public function testDoubleBytes( $head, $tail ) {
 		for ( $first = 0xc0; $first < 0x100; $first += 2 ) {
 			for ( $second = 0x80; $second < 0x100; $second += 2 ) {
 				$char = $head . chr( $first ) . chr( $second ) . $tail;
@@ -168,7 +173,8 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 					$this->assertEquals(
 						bin2hex( $norm ),
 						bin2hex( $clean ),
-						"Pair $x should be intact" );
+						"Pair $x should be intact"
+					);
 					if ( $norm != $clean ) {
 						return;
 					}
@@ -178,7 +184,8 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 					$this->assertEquals(
 						bin2hex( $norm ),
 						bin2hex( $clean ),
-						"Forbidden pair $x should be rejected" );
+						"Forbidden pair $x should be rejected"
+					);
 					if ( $norm != $clean ) {
 						return;
 					}
@@ -187,7 +194,8 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 					$this->assertEquals(
 						bin2hex( $norm ),
 						bin2hex( $clean ),
-						"Forbidden pair $x should be rejected" );
+						"Forbidden pair $x should be rejected"
+					);
 					if ( $norm != $clean ) {
 						return;
 					}
@@ -199,7 +207,7 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider provideAllBytes
 	 */
-	function testTripleBytes( $head, $tail ) {
+	public function testTripleBytes( $head, $tail ) {
 		for ( $first = 0xc0; $first < 0x100; $first += 2 ) {
 			for ( $second = 0x80; $second < 0x100; $second += 2 ) {
 				# for( $third = 0x80; $third < 0x100; $third++ ) {
@@ -217,32 +225,37 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 							$this->assertEquals(
 								bin2hex( $head . Constants::UTF8_REPLACEMENT . $tail ),
 								bin2hex( $clean ),
-								"Overlong triplet $x should be rejected" );
+								"Overlong triplet $x should be rejected"
+							);
 						} elseif ( $first == 0xed &&
 							( chr( $first ) . chr( $second ) . chr( $third ) ) >= Constants::UTF8_SURROGATE_FIRST
 						) {
 							$this->assertEquals(
 								bin2hex( $head . Constants::UTF8_REPLACEMENT . $tail ),
 								bin2hex( $clean ),
-								"Surrogate triplet $x should be rejected" );
+								"Surrogate triplet $x should be rejected"
+							);
 						} else {
 							$this->assertEquals(
 								bin2hex( Validator::NFC( $char ) ),
 								bin2hex( $clean ),
-								"Triplet $x should be intact" );
+								"Triplet $x should be intact"
+							);
 						}
 					} elseif ( $first > 0xc1 && $first < 0xe0 && $second < 0xc0 ) {
 						$this->assertEquals(
 							bin2hex( Validator::NFC( $head . chr( $first ) .
 									chr( $second ) ) . Constants::UTF8_REPLACEMENT . $tail ),
 							bin2hex( $clean ),
-							"Valid 2-byte $x + broken tail" );
+							"Valid 2-byte $x + broken tail"
+						);
 					} elseif ( $second > 0xc1 && $second < 0xe0 && $third < 0xc0 ) {
 						$this->assertEquals(
 							bin2hex( $head . Constants::UTF8_REPLACEMENT .
 								Validator::NFC( chr( $second ) . chr( $third ) . $tail ) ),
 							bin2hex( $clean ),
-							"Broken head + valid 2-byte $x" );
+							"Broken head + valid 2-byte $x"
+						);
 					} elseif ( ( $first > 0xfd || $second > 0xfd ) &&
 						( ( $second > 0xbf && $third > 0xbf ) ||
 							( $second < 0xc0 && $third < 0xc0 ) ||
@@ -256,17 +269,20 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 								Constants::UTF8_REPLACEMENT . Constants::UTF8_REPLACEMENT . $tail
 							),
 							bin2hex( $clean ),
-							"Forbidden triplet $x should be rejected" );
+							"Forbidden triplet $x should be rejected"
+						);
 					} elseif ( $first > 0xc2 && $second < 0xc0 && $third < 0xc0 ) {
 						$this->assertEquals(
 							bin2hex( $head . Constants::UTF8_REPLACEMENT . $tail ),
 							bin2hex( $clean ),
-							"Forbidden triplet $x should be rejected" );
+							"Forbidden triplet $x should be rejected"
+						);
 					} else {
 						$this->assertEquals(
 							bin2hex( $head . Constants::UTF8_REPLACEMENT . Constants::UTF8_REPLACEMENT . $tail ),
 							bin2hex( $clean ),
-							"Forbidden triplet $x should be rejected" );
+							"Forbidden triplet $x should be rejected"
+						);
 					}
 				}
 			}
@@ -297,16 +313,22 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 
 	public function testInterposeRegression() {
 		$text = "\x4e\x30" .
-			"\xb1" . # bad tail
+			# bad tail
+			"\xb1" .
 			"\x3a" .
-			"\x92" . # bad tail
+			# bad tail
+			"\x92" .
 			"\x62\x3a" .
-			"\x84" . # bad tail
+			# bad tail
+			"\x84" .
 			"\x43" .
-			"\xc6" . # bad head
+			# bad head
+			"\xc6" .
 			"\x3f" .
-			"\x92" . # bad tail
-			"\xad" . # bad tail
+			# bad tail
+			"\x92" .
+			# bad tail
+			"\xad" .
 			"\x7d" .
 			"\xd9\x95";
 
@@ -326,19 +348,28 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( Validator::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) )
+		);
 	}
 
 	public function testOverlongRegression() {
 		$text = "\x67" .
-			"\x1a" . # forbidden ascii
-			"\xea" . # bad head
-			"\xc1\xa6" . # overlong sequence
-			"\xad" . # bad tail
-			"\x1c" . # forbidden ascii
-			"\xb0" . # bad tail
+			# forbidden ascii
+			"\x1a" .
+			# bad head
+			"\xea" .
+			# overlong sequence
+			"\xc1\xa6" .
+			# bad tail
+			"\xad" .
+			# forbidden ascii
+			"\x1c" .
+			# bad tail
+			"\xb0" .
 			"\x3c" .
-			"\x9e"; # bad tail
+			# bad tail
+			"\x9e";
+
 		$expect = "\x67" .
 			"\xef\xbf\xbd" .
 			"\xef\xbf\xbd" .
@@ -350,51 +381,74 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 			"\xef\xbf\xbd";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( Validator::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) )
+		);
 	}
 
 	public function testSurrogateRegression() {
-		$text = "\xed\xb4\x96" . # surrogate 0xDD16
-			"\x83" . # bad tail
-			"\xb4" . # bad tail
-			"\xac"; # bad head
+		$text =
+			# surrogate 0xDD16
+			"\xed\xb4\x96" .
+			# bad tail
+			"\x83" .
+			# bad tail
+			"\xb4" .
+			# bad head
+			"\xac";
+
 		$expect = "\xef\xbf\xbd" .
 			"\xef\xbf\xbd" .
 			"\xef\xbf\xbd" .
 			"\xef\xbf\xbd";
+
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( Validator::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) )
+		);
 	}
 
 	public function testBomRegression() {
-		$text = "\xef\xbf\xbe" . # U+FFFE, illegal char
-			"\xb2" . # bad tail
-			"\xef" . # bad head
+		$text =
+			# U+FFFE, illegal char
+			"\xef\xbf\xbe" .
+			# bad tail
+			"\xb2" .
+			# bad head
+			"\xef" .
 			"\x59";
+
 		$expect = "\xef\xbf\xbd" .
 			"\xef\xbf\xbd" .
 			"\xef\xbf\xbd" .
 			"\x59";
+
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( Validator::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) )
+		);
 	}
 
 	public function testForbiddenRegression() {
-		$text = "\xef\xbf\xbf"; # U+FFFF, illegal char
+		# U+FFFF, illegal char
+		$text = "\xef\xbf\xbf";
 		$expect = "\xef\xbf\xbd";
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( Validator::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) )
+		);
 	}
 
 	public function testHangulRegression() {
-		$text = "\xed\x9c\xaf" . # Hangul char
-			"\xe1\x87\x81"; # followed by another final jamo
-		$expect = $text; # Should *not* change.
+		$text =
+			# Hangul char
+			"\xed\x9c\xaf" .
+			# followed by another final jamo
+			"\xe1\x87\x81";
+		# Should *not* change.
+		$expect = $text;
 		$this->assertEquals(
 			bin2hex( $expect ),
-			bin2hex( Validator::cleanUp( $text ) ) );
+			bin2hex( Validator::cleanUp( $text ) )
+		);
 	}
 }

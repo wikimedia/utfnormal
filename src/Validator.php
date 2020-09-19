@@ -66,7 +66,7 @@ class Validator {
 	 * @param string $string a UTF-8 string
 	 * @return string a clean, shiny, normalized UTF-8 string
 	 */
-	static function cleanUp( $string ) {
+	public static function cleanUp( $string ) {
 		if ( NORMALIZE_INTL ) {
 			$string = self::replaceForNativeNormalize( $string );
 			$norm = normalizer_normalize( $string, Normalizer::FORM_C );
@@ -101,7 +101,7 @@ class Validator {
 	 * @param string $string a valid UTF-8 string. Input is not validated.
 	 * @return string a UTF-8 string in normal form C
 	 */
-	static function toNFC( $string ) {
+	public static function toNFC( $string ) {
 		if ( NORMALIZE_INTL ) {
 			return normalizer_normalize( $string, Normalizer::FORM_C );
 		} elseif ( self::quickIsNFC( $string ) ) {
@@ -118,7 +118,7 @@ class Validator {
 	 * @param string $string A valid UTF-8 string. Input is not validated.
 	 * @return string A UTF-8 string in normal form D
 	 */
-	static function toNFD( $string ) {
+	public static function toNFD( $string ) {
 		if ( NORMALIZE_INTL ) {
 			return normalizer_normalize( $string, Normalizer::FORM_D );
 		} elseif ( preg_match( '/[\x80-\xff]/', $string ) ) {
@@ -136,7 +136,7 @@ class Validator {
 	 * @param string $string A valid UTF-8 string. Input is not validated.
 	 * @return string A UTF-8 string in normal form KC
 	 */
-	static function toNFKC( $string ) {
+	public static function toNFKC( $string ) {
 		if ( NORMALIZE_INTL ) {
 			return normalizer_normalize( $string, Normalizer::FORM_KC );
 		} elseif ( preg_match( '/[\x80-\xff]/', $string ) ) {
@@ -154,7 +154,7 @@ class Validator {
 	 * @param string $string a valid UTF-8 string. Input is not validated.
 	 * @return string a UTF-8 string in normal form KD
 	 */
-	static function toNFKD( $string ) {
+	public static function toNFKD( $string ) {
 		if ( NORMALIZE_INTL ) {
 			return normalizer_normalize( $string, Normalizer::FORM_KD );
 		} elseif ( preg_match( '/[\x80-\xff]/', $string ) ) {
@@ -166,9 +166,8 @@ class Validator {
 
 	/**
 	 * Load the basic composition data if necessary
-	 * @private
 	 */
-	static function loadData() {
+	public static function loadData() {
 		if ( !isset( self::$utfCombiningClass ) ) {
 			require_once __DIR__ . '/UtfNormalData.inc';
 		}
@@ -180,7 +179,7 @@ class Validator {
 	 * @param string $string a valid UTF-8 string. Input is not validated.
 	 * @return bool
 	 */
-	static function quickIsNFC( $string ) {
+	public static function quickIsNFC( $string ) {
 		# ASCII is always valid NFC!
 		# If it's pure ASCII, let it through.
 		if ( !preg_match( '/[\x80-\xff]/', $string ) ) {
@@ -223,7 +222,7 @@ class Validator {
 	 * @param string &$string A UTF-8 string, altered on output to be valid UTF-8 safe for XML.
 	 * @return bool
 	 */
-	static function quickIsNFCVerify( &$string ) {
+	public static function quickIsNFCVerify( &$string ) {
 		# Screen out some characters that eg won't be allowed in XML
 		$string = preg_replace( '/[\x00-\x08\x0b\x0c\x0e-\x1f]/', Constants::UTF8_REPLACEMENT, $string );
 
@@ -445,39 +444,36 @@ class Validator {
 	/**
 	 * @param string $string
 	 * @return string
-	 * @private
 	 */
-	static function NFC( $string ) {
+	public static function NFC( $string ) {
 		return self::fastCompose( self::NFD( $string ) );
 	}
 
 	/**
 	 * @param string $string
 	 * @return string
-	 * @private
 	 */
-	static function NFD( $string ) {
+	public static function NFD( $string ) {
 		self::loadData();
 
 		return self::fastCombiningSort(
-			self::fastDecompose( $string, self::$utfCanonicalDecomp ) );
+			self::fastDecompose( $string, self::$utfCanonicalDecomp )
+		);
 	}
 
 	/**
 	 * @param string $string
 	 * @return string
-	 * @private
 	 */
-	static function NFKC( $string ) {
+	public static function NFKC( $string ) {
 		return self::fastCompose( self::NFKD( $string ) );
 	}
 
 	/**
 	 * @param string $string
 	 * @return string
-	 * @private
 	 */
-	static function NFKD( $string ) {
+	public static function NFKD( $string ) {
 		if ( !isset( self::$utfCompatibilityDecomp ) ) {
 			require_once __DIR__ . '/UtfNormalDataK.inc';
 		}
@@ -490,12 +486,11 @@ class Validator {
 	 * Perform decomposition of a UTF-8 string into either D or KD form
 	 * (depending on which decomposition map is passed to us).
 	 * Input is assumed to be *valid* UTF-8. Invalid code will break.
-	 * @private
 	 * @param string $string valid UTF-8 string
 	 * @param array $map hash of expanded decomposition map
 	 * @return string a UTF-8 string decomposed, not yet normalized (needs sorting)
 	 */
-	static function fastDecompose( $string, $map ) {
+	public static function fastDecompose( $string, $map ) {
 		self::loadData();
 		$len = strlen( $string );
 		$out = '';
@@ -554,11 +549,10 @@ class Validator {
 	/**
 	 * Sorts combining characters into canonical order. This is the
 	 * final step in creating decomposed normal forms D and KD.
-	 * @private
 	 * @param string $string a valid, decomposed UTF-8 string. Input is not validated.
 	 * @return string a UTF-8 string with combining characters sorted in canonical order
 	 */
-	static function fastCombiningSort( $string ) {
+	public static function fastCombiningSort( $string ) {
 		self::loadData();
 		$len = strlen( $string );
 		$out = '';
@@ -607,13 +601,12 @@ class Validator {
 	/**
 	 * Produces canonically composed sequences, i.e. normal form C or KC.
 	 *
-	 * @private
 	 * @param string $string a valid UTF-8 string in sorted normal form D or KD.
 	 *   Input is not validated.
 	 * @return string a UTF-8 string with canonical precomposed characters used
 	 *   where possible.
 	 */
-	static function fastCompose( $string ) {
+	public static function fastCompose( $string ) {
 		self::loadData();
 		$len = strlen( $string );
 		$out = '';
@@ -747,7 +740,7 @@ class Validator {
 	 * @param string $string
 	 * @return string
 	 */
-	static function placebo( $string ) {
+	public static function placebo( $string ) {
 		$len = strlen( $string );
 		$out = '';
 		for ( $i = 0; $i < $len; $i++ ) {
