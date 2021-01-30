@@ -1,3 +1,7 @@
+## 3.0.1 / 2021-01-30 ##
+* Workaround mb_chr( 0 ) bug in PHP 7.2 (Kunal Mehta)
+  * Utils::codepointToUtf8() is no longer deprecated.
+
 ## 3.0.0 / 2021-01-30 ##
 * Replace a couple of methods with native functions (Max Semenik)
   * Utils::codepointToUtf8() is deprecated in favor of mb_chr()
