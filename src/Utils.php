@@ -33,13 +33,15 @@ class Utils {
 	/**
 	 * Return UTF-8 sequence for a given Unicode code point.
 	 *
-	 * @deprecated since 2.1, use mb_chr()
-	 *
 	 * @param int $codepoint
 	 * @return string
 	 * @throws InvalidArgumentException if fed out of range data.
 	 */
 	public static function codepointToUtf8( $codepoint ) {
+		// In PHP 7.2, mb_chr is buggy when $codepoint is 0 (null byte)
+		if ( $codepoint === 0 ) {
+			return "\u{0000}";
+		}
 		$char = mb_chr( $codepoint );
 		if ( $char === false ) {
 			throw new InvalidArgumentException( "Asked for code outside of range ($codepoint)" );
@@ -62,7 +64,7 @@ class Utils {
 		$utf = '';
 		foreach ( explode( ' ', $sequence ) as $hex ) {
 			$n = hexdec( $hex );
-			$utf .= mb_chr( $n );
+			$utf .= self::codepointToUtf8( $n );
 		}
 
 		return $utf;
