@@ -312,26 +312,24 @@ class Validator {
 						if ( --$len && ( $c = $str[++$i] ) >= "\x80" && $c < "\xc0" ) {
 							# Legal tail bytes are nice.
 							$sequence .= $c;
+						} elseif ( $len === 0 ) {
+							# Premature end of string!
+							# Drop a replacement character into output to
+							# represent the invalid UTF-8 sequence.
+							$replace[] = [ Constants::UTF8_REPLACEMENT,
+								$base + $i + 1 - strlen( $sequence ),
+								strlen( $sequence ) ];
+							break 2;
 						} else {
-							if ( 0 == $len ) {
-								# Premature end of string!
-								# Drop a replacement character into output to
-								# represent the invalid UTF-8 sequence.
-								$replace[] = [ Constants::UTF8_REPLACEMENT,
-									$base + $i + 1 - strlen( $sequence ),
-									strlen( $sequence ) ];
-								break 2;
-							} else {
-								# Illegal tail byte; abandon the sequence.
-								$replace[] = [ Constants::UTF8_REPLACEMENT,
-									$base + $i - strlen( $sequence ),
-									strlen( $sequence ) ];
-								# Back up and reprocess this byte; it may itself
-								# be a legal ASCII or UTF-8 sequence head.
-								--$i;
-								++$len;
-								continue 2;
-							}
+							# Illegal tail byte; abandon the sequence.
+							$replace[] = [ Constants::UTF8_REPLACEMENT,
+								$base + $i - strlen( $sequence ),
+								strlen( $sequence ) ];
+							# Back up and reprocess this byte; it may itself
+							# be a legal ASCII or UTF-8 sequence head.
+							--$i;
+							++$len;
+							continue 2;
 						}
 					} while ( --$remaining );
 
@@ -614,8 +612,9 @@ class Validator {
 		$lastHangul = 0;
 		$startChar = '';
 		$combining = '';
-		$x1 = ord( substr( Constants::UTF8_HANGUL_VBASE, 0, 1 ) );
-		$x2 = ord( substr( Constants::UTF8_HANGUL_TEND, 0, 1 ) );
+		// Optim: ord() ignores everything after the first byte
+		$x1 = ord( Constants::UTF8_HANGUL_VBASE );
+		$x2 = ord( Constants::UTF8_HANGUL_TEND );
 		for ( $i = 0; $i < $len; $i++ ) {
 			$c = $string[$i];
 			$n = ord( $c );
@@ -638,27 +637,26 @@ class Validator {
 				$i++;
 			}
 			$pair = $startChar . $c;
-			if ( $n > 0x80 ) {
-				if ( isset( self::$utfCombiningClass[$c] ) ) {
-					# A combining char; see what we can do with it
-					$class = self::$utfCombiningClass[$c];
-					if ( !empty( $startChar ) &&
-						$lastClass < $class &&
-						$class > 0 &&
-						isset( self::$utfCanonicalComp[$pair] )
-					) {
-						$startChar = self::$utfCanonicalComp[$pair];
-						$class = 0;
-					} else {
-						$combining .= $c;
-					}
-					$lastClass = $class;
-					$lastHangul = 0;
-					continue;
+			if ( $n > 0x80 && isset( self::$utfCombiningClass[$c] ) ) {
+				# A combining char; see what we can do with it
+				$class = self::$utfCombiningClass[$c];
+				// TODO: Is refusing falsey $startChar (e.g. '0') intentional here?
+				if ( $startChar &&
+					$lastClass < $class &&
+					$class > 0 &&
+					isset( self::$utfCanonicalComp[$pair] )
+				) {
+					$startChar = self::$utfCanonicalComp[$pair];
+					$class = 0;
+				} else {
+					$combining .= $c;
 				}
+				$lastClass = $class;
+				$lastHangul = 0;
+				continue;
 			}
 			# New start char
-			if ( $lastClass == 0 ) {
+			if ( $lastClass === 0 ) {
 				if ( isset( self::$utfCanonicalComp[$pair] ) ) {
 					$startChar = self::$utfCanonicalComp[$pair];
 					$lastHangul = 0;
@@ -762,9 +760,6 @@ class Validator {
 			'/[\x00-\x08\x0b\x0c\x0e-\x1f]/',
 			Constants::UTF8_REPLACEMENT,
 			$string );
-		$string = str_replace( Constants::UTF8_FFFE, Constants::UTF8_REPLACEMENT, $string );
-		$string = str_replace( Constants::UTF8_FFFF, Constants::UTF8_REPLACEMENT, $string );
-
-		return $string;
+		return str_replace( [ Constants::UTF8_FFFE, Constants::UTF8_FFFF ], Constants::UTF8_REPLACEMENT, $string );
 	}
 }
