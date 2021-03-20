@@ -360,7 +360,7 @@ class Validator {
 								# encode a character. Naïve string comparisons can be
 								# tricked into failing to see a match for an ASCII
 								# character, for instance, which can be a security hole
-								# if blacklist checks are being used.
+								# if lists of excluded characters are being used.
 								( $n < 0xc2 && $sequence <= Constants::UTF8_OVERLONG_A )
 								|| ( $n == 0xe0 && $sequence <= Constants::UTF8_OVERLONG_B )
 								|| ( $n == 0xf0 && $sequence <= Constants::UTF8_OVERLONG_C )
