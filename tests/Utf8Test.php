@@ -81,10 +81,7 @@ class Utf8Test extends PHPUnit\Framework\TestCase {
 				if ( in_array( $test, $longTests ) ) {
 					fgets( $in );
 
-					// @codingStandardsIgnoreStart Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed
 					for ( $line = fgets( $in ); !preg_match( '/^\s+\|/', $line ); $line = fgets( $in ) ) {
-						// @codingStandardsIgnoreEnd
-
 						$testCases[] = [ $test, $line, $columns, $exceptions ];
 					}
 				} else {

@@ -222,13 +222,12 @@ if ( $out ) {
  *
  * @file
  */
-// @codingStandardsIgnoreFile
 
 UtfNormal\Validator::\$utfCombiningClass = unserialize( '$serCombining' );
 UtfNormal\Validator::\$utfCanonicalComp = unserialize( '$serComp' );
 UtfNormal\Validator::\$utfCanonicalDecomp = unserialize( '$serCanon' );
 UtfNormal\Validator::\$utfCheckNFC = unserialize( '$serCheckNFC' );
-\n";
+";
 	fputs( $out, $outdata );
 	fclose( $out );
 	print "Wrote out UtfNormalData.inc\n";
@@ -247,10 +246,9 @@ if ( $out ) {
  *
  * @file
  */
-// @codingStandardsIgnoreFile
 
 UtfNormal\Validator::\$utfCompatibilityDecomp = unserialize( '$serCompat' );
-\n";
+";
 	fputs( $out, $outdata );
 	fclose( $out );
 	print "Wrote out UtfNormalDataK.inc\n";
@@ -265,9 +263,7 @@ UtfNormal\Validator::\$utfCompatibilityDecomp = unserialize( '$serCompat' );
  * @return string
  */
 function callbackCanonical( $matches ) {
-	// @codingStandardsIgnoreStart MediaWiki.NamingConventions.ValidGlobalName.wgPrefix
 	global $canonicalDecomp;
-	// @codingStandardsIgnoreEnd
 
 	if ( isset( $canonicalDecomp[$matches[1]] ) ) {
 		return $canonicalDecomp[$matches[1]];
@@ -281,9 +277,7 @@ function callbackCanonical( $matches ) {
  * @return string
  */
 function callbackCompat( $matches ) {
-	// @codingStandardsIgnoreStart MediaWiki.NamingConventions.ValidGlobalName.wgPrefix
 	global $compatibilityDecomp;
-	// @codingStandardsIgnoreEnd
 
 	if ( isset( $compatibilityDecomp[$matches[1]] ) ) {
 		return $compatibilityDecomp[$matches[1]];
