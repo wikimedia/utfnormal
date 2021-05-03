@@ -13,7 +13,7 @@
 	</rule>
 	<file>.</file>
 	<arg name="encoding" value="UTF-8"/>
-	<arg name="extensions" value="php,inc"/>
+	<arg name="extensions" value="php"/>
 	<exclude-pattern>coverage</exclude-pattern>
 	<exclude-pattern>doc/html</exclude-pattern>
 	<!-- Generated files -->
