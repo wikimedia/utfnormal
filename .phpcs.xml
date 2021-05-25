@@ -14,9 +14,5 @@
 	<file>.</file>
 	<arg name="encoding" value="UTF-8"/>
 	<arg name="extensions" value="php"/>
-	<exclude-pattern>coverage</exclude-pattern>
-	<exclude-pattern>doc/html</exclude-pattern>
-	<!-- Generated files -->
-	<exclude-pattern>src/UtfNormalData.inc</exclude-pattern>
-	<exclude-pattern>src/UtfNormalDataK.inc</exclude-pattern>
+	<exclude-pattern type="relative">^doc/html/*</exclude-pattern>
 </ruleset>
