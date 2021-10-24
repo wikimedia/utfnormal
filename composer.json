@@ -19,11 +19,11 @@
 		"ext-mbstring": "*"
 	},
 	"require-dev": {
-		"mediawiki/mediawiki-codesniffer": "37.0.0",
+		"mediawiki/mediawiki-codesniffer": "38.0.0",
 		"mediawiki/minus-x": "1.1.1",
 		"ockcyp/covers-validator": "1.3.3",
 		"php-parallel-lint/php-console-highlighter": "0.5.0",
-		"php-parallel-lint/php-parallel-lint": "1.3.0",
+		"php-parallel-lint/php-parallel-lint": "1.3.1",
 		"phpunit/phpunit": "^8.5"
 	},
 	"scripts": {
@@ -32,7 +32,7 @@
 			"parallel-lint . --exclude vendor -e php,inc",
 			"phpunit",
 			"covers-validator",
-			"phpcs -sp",
+			"@phpcs",
 			"minus-x check .",
 			"php scripts/benchmark.php"
 		],
@@ -40,6 +40,7 @@
 		"fix": [
 			"minus-x fix .",
 			"phpcbf"
-		]
+		],
+		"phpcs": "phpcs -sp"
 	}
 }
