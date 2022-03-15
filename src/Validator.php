@@ -70,10 +70,18 @@ class Validator {
 		if ( NORMALIZE_INTL ) {
 			$string = self::replaceForNativeNormalize( $string );
 			$norm = normalizer_normalize( $string, Normalizer::FORM_C );
+			// T303790 - Can be simplified (remove === null) check when support >= PHP 8.1
 			if ( $norm === null || $norm === false ) {
 				# normalizer_normalize will either return false or null
 				# (depending on which doc you read) if invalid utf8 string.
 				# quickIsNFCVerify cleans up invalid sequences.
+				#
+				# < PHP 8.1
+				# https://github.com/php/php-src/blob/PHP-8.0.17/ext/intl/normalizer/normalizer_normalize.c
+				# >= PHP 8.1
+				# https://www.php.net/manual/en/normalizer.normalize.php says return false
+				# https://github.com/php/php-src/blob/PHP-8.1.0/ext/intl/normalizer/normalizer_normalize.c
+				# Changed in https://github.com/php/php-src/commit/5dc995df375571489d9149fdccf258c0bd123317
 
 				if ( self::quickIsNFCVerify( $string ) ) {
 					# if that's true, the string is actually already normal.
