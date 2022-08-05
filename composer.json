@@ -34,7 +34,7 @@
 			"phpunit",
 			"covers-validator",
 			"@phpcs",
-			"phan --allow-polyfill-parser --long-progress-bar",
+			"@phan",
 			"minus-x check .",
 			"php scripts/benchmark.php"
 		],
