@@ -116,7 +116,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 	}
 
 	public static function provideUnicodeData() {
-		$in = fopen( __DIR__ . '/data/UnicodeData.txt', "rt" );
+		$in = fopen( dirname( __DIR__ ) . '/scripts/data/UnicodeData.txt', "rt" );
 		$testCases = [];
 		while ( ( $line = fgets( $in ) ) !== false ) {
 			$cols = explode( ';', $line );
