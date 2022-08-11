@@ -128,7 +128,12 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 		$testCases = [];
 		while ( false !== ( $line = fgets( $in ) ) ) {
 			$cols = explode( ';', $line );
-			$char = Utils::codepointToUtf8( hexdec( $cols[0] ) );
+			try {
+				$char = Utils::codepointToUtf8( hexdec( $cols[0] ) );
+			} catch ( InvalidArgumentException $ex ) {
+				// Skip codes out of range
+				continue;
+			}
 			$desc = $cols[0] . ": " . $cols[1];
 			if ( $char < "\x20" ||
 				$char >= Constants::UTF8_SURROGATE_FIRST && $char <= Constants::UTF8_SURROGATE_LAST
