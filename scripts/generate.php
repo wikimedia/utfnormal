@@ -79,7 +79,7 @@ $in = getFilePointer(
 );
 print "Initializing normalization quick check tables...\n";
 $checkNFC = [];
-while ( false !== ( $line = fgets( $in ) ) ) {
+while ( ( $line = fgets( $in ) ) !== false ) {
 	$matches = [];
 	if ( preg_match(
 		'/^([0-9A-F]+)(?:..([0-9A-F]+))?\s*;\s*(NFC_QC)\s*;\s*([MN])/',
@@ -106,7 +106,7 @@ $in = getFilePointer(
 	'http://www.unicode.org/Public/UNIDATA/CompositionExclusions.txt'
 );
 $exclude = [];
-while ( false !== ( $line = fgets( $in ) ) ) {
+while ( ( $line = fgets( $in ) ) !== false ) {
 	if ( preg_match( '/^([0-9A-F]+)/i', $line, $matches ) ) {
 		$codepoint = $matches[1];
 		$source = Utils::codepointToUtf8( hexdec( $codepoint ) );
@@ -128,7 +128,7 @@ $compat = 0;
 $canon = 0;
 
 print "Reading character definitions...\n";
-while ( false !== ( $line = fgets( $in ) ) ) {
+while ( ( $line = fgets( $in ) ) !== false ) {
 	$columns = explode( ';', $line );
 	$codepoint = $columns[0];
 	$name = $columns[1];

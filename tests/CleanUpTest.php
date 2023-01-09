@@ -22,6 +22,7 @@
  *
  * @file
  */
+
 use UtfNormal\Constants;
 use UtfNormal\Utils;
 use UtfNormal\Validator;
@@ -41,6 +42,8 @@ use UtfNormal\Validator;
  * We ignore code coverage for this test suite until they are rewritten
  * to use data providers (bug 46561).
  * @codeCoverageIgnore
+ *
+ * @covers \UtfNormal\Validator
  */
 class CleanUpTest extends PHPUnit\Framework\TestCase {
 	public function testAscii() {

@@ -34,13 +34,16 @@ use UtfNormal\Validator;
  */
 class UtfNormalTest extends PHPUnit\Framework\TestCase {
 
+	/**
+	 * @var array
+	 */
 	protected static $testedChars = [];
 
 	public static function provideNormalizationTest() {
 		$in = fopen( __DIR__ . '/data/NormalizationTest.txt', "rt" );
 
 		$testCases = [];
-		while ( false !== ( $line = fgets( $in ) ) ) {
+		while ( ( $line = fgets( $in ) ) !== false ) {
 			list( $data, $comment ) = explode( '#', $line );
 			if ( $data === '' ) {
 				continue;
@@ -50,7 +53,10 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 				continue;
 			}
 
-			$columns = array_map( "UtfNormal\Utils::hexSequenceToUtf8", explode( ";", $data ) );
+			$columns = array_map(
+				[ Utils::class, 'hexSequenceToUtf8' ],
+				explode( ";", $data )
+			);
 			array_unshift( $columns, '' );
 
 			self::$testedChars[$columns[1]] = true;
@@ -110,6 +116,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 	 * test cases as one since PHPUnit is too slow otherwise
 	 *
 	 * @dataProvider provideNormalizationTest
+	 * @coversNothing
 	 */
 	public function testNormals( $testCases ) {
 		foreach ( $testCases as $case ) {
@@ -126,7 +133,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 	public static function provideUnicodeData() {
 		$in = fopen( __DIR__ . '/data/UnicodeData.txt', "rt" );
 		$testCases = [];
-		while ( false !== ( $line = fgets( $in ) ) ) {
+		while ( ( $line = fgets( $in ) ) !== false ) {
 			$cols = explode( ';', $line );
 			try {
 				$char = Utils::codepointToUtf8( hexdec( $cols[0] ) );
@@ -158,6 +165,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 	 *
 	 * @depends testNormals
 	 * @dataProvider provideUnicodeData
+	 * @coversNothing
 	 */
 	public function testInvariant( $testCases ) {
 		foreach ( $testCases as $case ) {

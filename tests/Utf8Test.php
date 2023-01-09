@@ -32,7 +32,7 @@ class Utf8Test extends PHPUnit\Framework\TestCase {
 		$in = fopen( __DIR__ . '/data/UTF-8-test.txt', "rt" );
 
 		$columns = 0;
-		while ( false !== ( $line = fgets( $in ) ) ) {
+		while ( ( $line = fgets( $in ) ) !== false ) {
 			$matches = [];
 			if ( preg_match( '/^(Here come the tests:\s*)\|$/', $line, $matches ) ) {
 				$columns = strpos( $line, '|' );
@@ -49,7 +49,8 @@ class Utf8Test extends PHPUnit\Framework\TestCase {
 
 		$ignore = [
 			# These two lines actually seem to be corrupt
-			'2.1.1', '2.2.1' ];
+			'2.1.1', '2.2.1'
+		];
 
 		$exceptions = [
 			# Tests that should mark invalid characters due to using long
@@ -57,17 +58,18 @@ class Utf8Test extends PHPUnit\Framework\TestCase {
 			'2.1.5', '2.1.6', '2.2.4', '2.2.5', '2.2.6', '2.3.5',
 
 			# Literal 0xffff, which is illegal
-			'2.2.3' ];
+			'2.2.3'
+		];
 
 		$longTests = [
 			# These tests span multiple lines
 			'3.1.9', '3.2.1', '3.2.2', '3.2.3', '3.2.4', '3.2.5',
-			'3.4' ];
+			'3.4'
+		];
 
 		$testCases = [];
 
-		$section = null;
-		while ( false !== ( $line = fgets( $in ) ) ) {
+		while ( ( $line = fgets( $in ) ) !== false ) {
 			$matches = [];
 			if ( preg_match( '/^(\d+)\s+(.*?)\s*\|/', $line, $matches ) ) {
 				continue;
@@ -95,7 +97,7 @@ class Utf8Test extends PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideLines
-	 * @covers UtfNormal\Validator::quickisNFCVerify
+	 * @covers \UtfNormal\Validator::quickisNFCVerify
 	 */
 	public function testLine( $test, $line, $columns, $exceptions ) {
 		$stripped = $line;

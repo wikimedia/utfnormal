@@ -107,10 +107,12 @@ class Utils {
 	 * @return string Escaped string.
 	 */
 	public static function escapeSingleString( $string ) {
-		return strtr( $string,
+		return strtr(
+			$string,
 			[
 				'\\' => '\\\\',
 				'\'' => '\\\''
-			] );
+			]
+		);
 	}
 }
