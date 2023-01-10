@@ -39,10 +39,6 @@ use UtfNormal\Validator;
  * @todo split me into test methods and providers per the below comment
  * @todo Document individual tests
  *
- * We ignore code coverage for this test suite until they are rewritten
- * to use data providers (bug 46561).
- * @codeCoverageIgnore
- *
  * @covers \UtfNormal\Validator
  */
 class CleanUpTest extends PHPUnit\Framework\TestCase {
