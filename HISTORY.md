@@ -1,3 +1,10 @@
+## 4.0.0 / 2023-08-29 ##
+* Micro optimization to code (Daimona Eaytoy)
+* Add phan support to library (Reedy)
+* Drop support for PHP 7.2 and 7.3 (James D. Forrester)
+* cleanup: Various cleanups in library (Reedy)
+* build: Update dependencies (James D. Forrester)
+
 ## 3.0.1 / 2021-01-30 ##
 * Workaround mb_chr( 0 ) bug in PHP 7.2 (Kunal Mehta)
   * Utils::codepointToUtf8() is no longer deprecated.
