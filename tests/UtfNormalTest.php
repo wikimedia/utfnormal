@@ -44,7 +44,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 
 		$testCases = [];
 		while ( ( $line = fgets( $in ) ) !== false ) {
-			list( $data, $comment ) = explode( '#', $line );
+			[ $data, $comment ] = explode( '#', $line );
 			if ( $data === '' ) {
 				continue;
 			}

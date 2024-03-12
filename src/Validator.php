@@ -448,7 +448,7 @@ class Validator {
 			$out = '';
 			$last = 0;
 			foreach ( $replace as $rep ) {
-				list( $replacement, $start, $length ) = $rep;
+				[ $replacement, $start, $length ] = $rep;
 				if ( $last < $start ) {
 					$out .= substr( $string, $last, $start - $last );
 				}

@@ -86,7 +86,7 @@ while ( ( $line = fgets( $in ) ) !== false ) {
 		$line,
 		$matches )
 	) {
-		list( $junk, $first, $last, $prop, $value ) = $matches;
+		[ $junk, $first, $last, $prop, $value ] = $matches;
 		# print "$first $last $prop $value\n";
 		if ( !$last ) {
 			$last = $first;
