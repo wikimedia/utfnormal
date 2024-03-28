@@ -1,7 +1,7 @@
 /.* export-ignore
+/build/ export-ignore
+/scripts/ export-ignore
 /tests/ export-ignore
 /composer.json export-ignore
 /Doxyfile export-ignore
 /phpunit.xml.dist export-ignore
-/build/ export-ignore
-/scripts/data export-ignore
