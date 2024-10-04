@@ -143,7 +143,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 			}
 			$desc = $cols[0] . ": " . $cols[1];
 			if ( $char < "\x20" ||
-				$char >= Constants::UTF8_SURROGATE_FIRST && $char <= Constants::UTF8_SURROGATE_LAST
+				( $char >= Constants::UTF8_SURROGATE_FIRST && $char <= Constants::UTF8_SURROGATE_LAST )
 			) {
 				# Can't check NULL with the ICU plugin, as null bytes fail in C land.
 				# Skip other control characters, as we strip them for XML safety.
