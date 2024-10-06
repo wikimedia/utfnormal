@@ -396,8 +396,8 @@ class Validator {
 
 								# U+FFFE and U+FFFF are explicitly forbidden in Unicode.
 								|| ( $n == 0xef &&
-									( $sequence == Constants::UTF8_FFFE )
-									|| ( $sequence == Constants::UTF8_FFFF ) )
+									( $sequence == Constants::UTF8_FFFE
+									|| $sequence == Constants::UTF8_FFFF ) )
 
 								# Unicode has been limited to 21 bits; longer
 								# sequences are not allowed.
