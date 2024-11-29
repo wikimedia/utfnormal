@@ -26,7 +26,7 @@
 		"ockcyp/covers-validator": "1.6.0",
 		"php-parallel-lint/php-console-highlighter": "1.0.0",
 		"php-parallel-lint/php-parallel-lint": "1.4.0",
-		"phpunit/phpunit": "9.6.16"
+		"phpunit/phpunit": "9.6.21"
 	},
 	"suggest": {
 		"ext-intl": "Optional extension, for improved performance. PHP code fallback is used instead if ext-intl is not present."
