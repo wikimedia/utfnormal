@@ -196,6 +196,7 @@ class Validator {
 	 * Load the basic composition data if necessary
 	 */
 	public static function loadData() {
+		// @phan-suppress-next-line MediaWikiNoIssetIfDefined
 		if ( !isset( self::$utfCombiningClass ) ) {
 			require_once __DIR__ . '/UtfNormalData.inc';
 		}
@@ -263,7 +264,7 @@ class Validator {
 		}
 
 		static $checkit = null, $tailBytes = null, $utfCheckOrCombining = null;
-		if ( !isset( $checkit ) ) {
+		if ( $checkit === null ) {
 			# Load/build some scary lookup tables...
 			self::loadData();
 
@@ -501,6 +502,7 @@ class Validator {
 	 * @return string
 	 */
 	public static function NFKD( $string ) {
+		// @phan-suppress-next-line MediaWikiNoIssetIfDefined
 		if ( !isset( self::$utfCompatibilityDecomp ) ) {
 			require_once __DIR__ . '/UtfNormalDataK.inc';
 		}
