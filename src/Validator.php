@@ -675,8 +675,7 @@ class Validator {
 			if ( $n > 0x80 && isset( self::$utfCombiningClass[$c] ) ) {
 				# A combining char; see what we can do with it
 				$class = self::$utfCombiningClass[$c];
-				// TODO: Is refusing falsey $startChar (e.g. '0') intentional here?
-				if ( $startChar &&
+				if ( $startChar !== '' &&
 					$lastClass < $class &&
 					$class > 0 &&
 					isset( self::$utfCanonicalComp[$pair] )
