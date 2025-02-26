@@ -1,7 +1,7 @@
 <?php
 /**
  * This file was automatically generated -- do not edit!
- * Run UtfNormalGenerate.php to create this file again (make clean && make)
+ * Run scripts/generate.php to create this file again (make clean && make)
  *
  * @file
  */

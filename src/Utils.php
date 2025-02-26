@@ -42,6 +42,16 @@ class Utils {
 		if ( $codepoint === 0 ) {
 			return "\u{0000}";
 		}
+		// In PHP >=7.4, mb_chr fails when $codepoint is in surrogate range
+		// U+D800 - U+DBFF / U+DC00 - U+DFFF
+		if ( $codepoint >= 0xD800 && $codepoint <= 0xDFFF ) {
+			// UTF-8 encoding of the codepoint, the hard way.
+			return (
+				chr( 0xED ) .
+				chr( 0x80 | ( ( $codepoint >> 6 ) & 0x3F ) ) .
+				chr( 0x80 | ( $codepoint & 0x3F ) )
+			);
+		}
 		$char = mb_chr( $codepoint );
 		if ( $char === false ) {
 			throw new InvalidArgumentException( "Asked for code outside of range ($codepoint)" );
