@@ -169,6 +169,11 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 					$second < 0xc0
 				) {
 					$norm = Validator::NFC( $char );
+					if ( $head === '' && $norm !== $clean ) {
+						# Isolated combining characters in leading position
+						# can get DOTTED CIRCLE inserted as prefix.
+						$norm = "\u{25CC}" . $norm;
+					}
 					$this->assertEquals(
 						bin2hex( $norm ),
 						bin2hex( $clean ),
@@ -235,16 +240,28 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 								"Surrogate triplet $x should be rejected"
 							);
 						} else {
+							$norm = Validator::NFC( $char );
+							if ( $head === '' && $norm !== $clean ) {
+								# Isolated combining characters in leading position
+								# can get DOTTED CIRCLE inserted as prefix.
+								$norm = "\u{25CC}" . $norm;
+							}
 							$this->assertEquals(
-								bin2hex( Validator::NFC( $char ) ),
+								bin2hex( $norm ),
 								bin2hex( $clean ),
 								"Triplet $x should be intact"
 							);
 						}
 					} elseif ( $first > 0xc1 && $first < 0xe0 && $second < 0xc0 ) {
+						$norm = Validator::NFC( $head . chr( $first ) . chr( $second ) ) .
+							  Constants::UTF8_REPLACEMENT . $tail;
+						if ( $head === '' && $norm !== $clean ) {
+							# Isolated combining characters in leading position
+							# can get DOTTED CIRCLE inserted as prefix.
+							$norm = "\u{25CC}" . $norm;
+						}
 						$this->assertEquals(
-							bin2hex( Validator::NFC( $head . chr( $first ) .
-									chr( $second ) ) . Constants::UTF8_REPLACEMENT . $tail ),
+							bin2hex( $norm ),
 							bin2hex( $clean ),
 							"Valid 2-byte $x + broken tail"
 						);
@@ -445,6 +462,15 @@ class CleanUpTest extends PHPUnit\Framework\TestCase {
 			"\xe1\x87\x81";
 		# Should *not* change.
 		$expect = $text;
+		$this->assertEquals(
+			bin2hex( $expect ),
+			bin2hex( Validator::cleanUp( $text ) )
+		);
+	}
+
+	public function testU0338() {
+		$text = "\u{0338}<\u{0338}>\u{0338}";
+		$expect = "\u{25CC}\u{0338}\u{226E}\u{226F}";
 		$this->assertEquals(
 			bin2hex( $expect ),
 			bin2hex( Validator::cleanUp( $text ) )

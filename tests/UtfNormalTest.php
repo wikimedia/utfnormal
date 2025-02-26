@@ -105,11 +105,14 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 	}
 
 	private function assertCleanUp( $c, $desc ) {
-		$this->assertStringEquals( $c[2], Validator::cleanUp( $c[1] ), $desc );
-		$this->assertStringEquals( $c[2], Validator::cleanUp( $c[2] ), $desc );
-		$this->assertStringEquals( $c[2], Validator::cleanUp( $c[3] ), $desc );
-		$this->assertStringEquals( $c[4], Validator::cleanUp( $c[4] ), $desc );
-		$this->assertStringEquals( $c[4], Validator::cleanUp( $c[5] ), $desc );
+		# Some of the test cases contain isolated combining characters.
+		# Ensure we have a base character -- space is considered a base.
+		$p = " ";
+		$this->assertStringEquals( $p . $c[2], Validator::cleanUp( $p . $c[1] ), $desc );
+		$this->assertStringEquals( $p . $c[2], Validator::cleanUp( $p . $c[2] ), $desc );
+		$this->assertStringEquals( $p . $c[2], Validator::cleanUp( $p . $c[3] ), $desc );
+		$this->assertStringEquals( $p . $c[4], Validator::cleanUp( $p . $c[4] ), $desc );
+		$this->assertStringEquals( $p . $c[4], Validator::cleanUp( $p . $c[5] ), $desc );
 	}
 
 	/**
@@ -176,7 +179,9 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 			$this->assertStringEquals( $char, Validator::toNFD( $char ), $desc );
 			$this->assertStringEquals( $char, Validator::toNFKC( $char ), $desc );
 			$this->assertStringEquals( $char, Validator::toNFKD( $char ), $desc );
-			$this->assertStringEquals( $char, Validator::cleanUp( $char ), $desc );
+			# See ::assertCleanUp -- prefix with space to ensure combining
+			# characters have a preceding base.
+			$this->assertStringEquals( " $char", Validator::cleanUp( " $char" ), $desc );
 		}
 	}
 }

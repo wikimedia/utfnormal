@@ -76,8 +76,14 @@ class Validator {
 	public static $utfCheckNFC;
 
 	/**
+	 * @var string|null
+	 */
+	public static $utfIsolatedCombiningRegex;
+
+	/**
 	 * The ultimate convenience function! Clean up invalid UTF-8 sequences,
-	 * and convert to normal form C, canonical composition.
+	 * and convert to normal form C, canonical composition, then clean up
+	 * isolated combining characters.
 	 *
 	 * Fast return for pure ASCII strings; some lesser optimizations for
 	 * strings containing only known-good characters. Not as fast as toNFC().
@@ -87,6 +93,9 @@ class Validator {
 	 */
 	public static function cleanUp( $string ) {
 		if ( NORMALIZE_INTL ) {
+			if ( !preg_match( '/[\x00-\x08\x0b\x0c\x0e-\x1f\x80-\xff]/', $string ) ) {
+				return $string;
+			}
 			$string = self::replaceForNativeNormalize( $string );
 			$norm = normalizer_normalize( $string, Normalizer::FORM_C );
 			// T303790 - Can be simplified (remove === null) check when support >= PHP 8.1
@@ -104,20 +113,27 @@ class Validator {
 
 				if ( self::quickIsNFCVerify( $string ) ) {
 					# if that's true, the string is actually already normal.
+					# (and doesn't have any combining characters, so we can
+					# skip looking for isolated combining characters)
 					return $string;
 				} else {
 					# Now we are valid but non-normal
-					return normalizer_normalize( $string, Normalizer::FORM_C );
+					$norm = normalizer_normalize( $string, Normalizer::FORM_C );
 				}
-			} else {
-				return $norm;
 			}
+			$norm = self::prependIsolatedCombining( $norm );
+			return $norm;
 		} elseif ( self::quickIsNFCVerify( $string ) ) {
 			# Side effect -- $string has had UTF-8 errors cleaned up.
 			return $string;
 		} else {
-			return self::NFC( $string );
+			return self::prependIsolatedCombining( self::NFC( $string ) );
 		}
+	}
+
+	public static function prependIsolatedCombining( string $string ): string {
+		self::loadData();
+		return preg_replace( self::$utfIsolatedCombiningRegex, "\u{25CC}", $string );
 	}
 
 	/**

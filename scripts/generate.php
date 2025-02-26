@@ -126,12 +126,17 @@ $combiningClass = [];
 $total = 0;
 $compat = 0;
 $canon = 0;
+$isCombining = [];
+$canPrecedeCombining = [];
+$lastCodepoint = 0;
+$lastGeneralCategory = '';
 
 print "Reading character definitions...\n";
 while ( ( $line = fgets( $in ) ) !== false ) {
 	$columns = explode( ';', $line );
 	$codepoint = $columns[0];
 	$name = $columns[1];
+	$generalCategory = $columns[2];
 	$canonicalCombiningClass = $columns[3];
 	$decompositionMapping = $columns[5];
 
@@ -140,6 +145,33 @@ while ( ( $line = fgets( $in ) ) !== false ) {
 	if ( $canonicalCombiningClass != 0 ) {
 		$combiningClass[$source] = intval( $canonicalCombiningClass );
 	}
+
+	$isRange = str_ends_with( $name, ', Last>' );
+	if ( preg_match( '/^(Mc|Mn|Me)$/', $generalCategory ) ) {
+		$last = hexdec( $codepoint );
+		$first = $isRange ? $lastCodepoint : $last;
+		for ( $i = $first; $i <= $last; $i++ ) {
+			$isCombining[$i] = true;
+		}
+	}
+	if (
+		// Base or Combining character
+		preg_match( '/^(L|N|P|S|Zs|M)/', $generalCategory ) ||
+		// Zero-Width Non-Joiner
+		$source === "\u{200C}" ||
+		// Zero-Width Joiner
+		$source === "\u{200D}"
+	) {
+		// Unicode D52 definition of Combining character says this code point
+		// is allowed to precede a combining character
+		$last = hexdec( $codepoint );
+		$first = $isRange ? $lastCodepoint : $last;
+		for ( $i = $first; $i <= $last; $i++ ) {
+			$canPrecedeCombining[$i] = true;
+		}
+	}
+	$lastCodepoint = hexdec( $codepoint );
+	$lastGeneralCategory = $generalCategory;
 
 	if ( $decompositionMapping === '' ) {
 		continue;
@@ -221,7 +253,45 @@ while ( $changed > 0 ) {
 	$pass++;
 }
 
+print "Generating regular expression for isolated combining characters...\n";
+
+function arrayToCharClass( array $a ): string {
+	$limit = max( array_keys( $a ) );
+	$r = '';
+	# iterate through all codepoints
+	for ( $i = 0; $i <= $limit; $i++ ) {
+		# for each one included in the class...
+		if ( $a[$i] ?? false ) {
+			# see if we can make a range of other included codepoints.
+			for ( $j = $i + 1; ; $j++ ) {
+				if ( !( $a[$j] ?? false ) ) {
+					break;
+				}
+			}
+			# codepoints [$i, $j) are included
+			# generate regex-format character (or range)
+			$r .= '\x{' . dechex( $i ) . '}';
+			if ( --$j > $i ) {
+				$r .= '-';
+				$r .= '\x{' . dechex( $j ) . '}';
+			}
+			$i = $j;
+		}
+	}
+	return $r;
+}
+
+# Regexp is zero width so it matches the place where we need to insert a
+# base character to un-isolate the combining character.
+$isolatedCombiningRegex =
+	# we're looking for characters which *can't* precede combining chars...
+	'/(?<![' . arrayToCharClass( $canPrecedeCombining ) . '])' .
+	# followed by characters which *are* combining chars.
+	'(?=[' . arrayToCharClass( $isCombining ) . '])/Su';
+
 print "$total decomposition mappings ($canon canonical, $compat compatibility)\n";
+print count( $canPrecedeCombining ) . " codepoints are allowed to precede " .
+	count( $isCombining ) . " combining characters\n";
 
 $out = fopen( dirname( __DIR__ ) . "/src/UtfNormalData.inc", "wt" );
 if ( $out ) {
@@ -229,6 +299,7 @@ if ( $out ) {
 	$serComp = Utils::escapeSingleString( serialize( $canonicalComp ) );
 	$serCanon = Utils::escapeSingleString( serialize( $canonicalDecomp ) );
 	$serCheckNFC = Utils::escapeSingleString( serialize( $checkNFC ) );
+	$serIsoRegex = Utils::escapeSingleString( $isolatedCombiningRegex );
 	$outdata = "<" . "?php
 /**
  * This file was automatically generated -- do not edit!
@@ -241,6 +312,7 @@ UtfNormal\Validator::\$utfCombiningClass = unserialize( '$serCombining' );
 UtfNormal\Validator::\$utfCanonicalComp = unserialize( '$serComp' );
 UtfNormal\Validator::\$utfCanonicalDecomp = unserialize( '$serCanon' );
 UtfNormal\Validator::\$utfCheckNFC = unserialize( '$serCheckNFC' );
+UtfNormal\Validator::\$utfIsolatedCombiningRegex = '$serIsoRegex';
 ";
 	fputs( $out, $outdata );
 	fclose( $out );
