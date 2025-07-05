@@ -176,8 +176,15 @@ while ( $changed > 0 ) {
 	foreach ( $canonicalDecomp as $source => $dest ) {
 		$newDest = preg_replace_callback(
 			'/([\xc0-\xff][\x80-\xbf]+)/',
-			'callbackCanonical',
-			$dest );
+			static function ( $matches ) use ( &$canonicalDecomp ) {
+				if ( isset( $canonicalDecomp[$matches[1]] ) ) {
+					return $canonicalDecomp[$matches[1]];
+				}
+
+				return $matches[1];
+			},
+			$dest
+		);
 		if ( $newDest === $dest ) {
 			continue;
 		}
@@ -196,8 +203,15 @@ while ( $changed > 0 ) {
 	foreach ( $compatibilityDecomp as $source => $dest ) {
 		$newDest = preg_replace_callback(
 			'/([\xc0-\xff][\x80-\xbf]+)/',
-			'callbackCompat',
-			$dest );
+			static function ( $matches ) use ( &$compatibilityDecomp ) {
+				if ( isset( $compatibilityDecomp[$matches[1]] ) ) {
+					return $compatibilityDecomp[$matches[1]];
+				}
+
+				return $matches[1];
+			},
+			$dest
+		);
 		if ( $newDest === $dest ) {
 			continue;
 		}
@@ -256,32 +270,4 @@ UtfNormal\Validator::\$utfCompatibilityDecomp = unserialize( '$serCompat' );
 } else {
 	print "Can't create file UtfNormalDataK.inc\n";
 	exit( -1 );
-}
-
-/**
- * @param array $matches
- * @return string
- */
-function callbackCanonical( $matches ) {
-	global $canonicalDecomp;
-
-	if ( isset( $canonicalDecomp[$matches[1]] ) ) {
-		return $canonicalDecomp[$matches[1]];
-	}
-
-	return $matches[1];
-}
-
-/**
- * @param array $matches
- * @return string
- */
-function callbackCompat( $matches ) {
-	global $compatibilityDecomp;
-
-	if ( isset( $compatibilityDecomp[$matches[1]] ) ) {
-		return $compatibilityDecomp[$matches[1]];
-	}
-
-	return $matches[1];
 }
