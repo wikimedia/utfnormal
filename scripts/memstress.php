@@ -40,11 +40,11 @@ define( 'BIGSIZE', 1024 * 1024 * 10 );
 ini_set( 'memory_limit', BIGSIZE + 120 * 1024 * 1024 );
 
 $testfiles = [
-	'testdata/washington.txt' => 'English text',
-	'testdata/berlin.txt' => 'German text',
-	'testdata/bulgakov.txt' => 'Russian text',
-	'testdata/tokyo.txt' => 'Japanese text',
-	'testdata/young.txt' => 'Korean text'
+	__DIR__ . '/testdata/washington.txt' => 'English text',
+	__DIR__ . '/testdata/berlin.txt' => 'German text',
+	__DIR__ . '/testdata/bulgakov.txt' => 'Russian text',
+	__DIR__ . '/testdata/tokyo.txt' => 'Japanese text',
+	__DIR__ . '/testdata/young.txt' => 'Korean text'
 ];
 $normalizer = new Validator;
 Validator::loadData();
