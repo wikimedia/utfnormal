@@ -21,7 +21,6 @@
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
- * @ingroup UtfNormal\UtfNormal
  */
 namespace UtfNormal;
 

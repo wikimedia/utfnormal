@@ -4,9 +4,6 @@ namespace UtfNormal;
 use InvalidArgumentException;
 
 /**
- * Some of these functions are adapted from places in MediaWiki.
- * Should probably merge them for consistency.
- *
  * Copyright © 2004 Brion Vibber <brion@pobox.com>
  * https://www.mediawiki.org/
  *
@@ -26,9 +23,14 @@ use InvalidArgumentException;
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
- * @ingroup UtfNormal
  */
 
+/**
+ * Some of these functions are adapted from places in MediaWiki.
+ * Should probably merge them for consistency.
+ *
+ * @ingroup UtfNormal
+ */
 class Utils {
 	/**
 	 * Return UTF-8 sequence for a given Unicode code point.

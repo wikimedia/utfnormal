@@ -1,8 +1,5 @@
 <?php
 /**
- * Implements the conformance test at:
- * http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
- *
  * Copyright © 2004 Brion Vibber <brion@pobox.com>
  * https://www.mediawiki.org/
  *
@@ -29,6 +26,10 @@ use UtfNormal\Utils;
 use UtfNormal\Validator;
 
 /**
+ * Implements the conformance test at:
+ * http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
+ *
+ * @ingroup UtfNormal
  * @group UtfNormal
  * @group large
  */

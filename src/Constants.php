@@ -2,12 +2,6 @@
 namespace UtfNormal;
 
 /**
- * Some constant definitions for the unicode normalization module.
- *
- * Note: these constants must all be resolvable at compile time by HipHop,
- * since this file will not be executed during request startup for a compiled
- * MediaWiki.
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -24,9 +18,17 @@ namespace UtfNormal;
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
- * @ingroup UtfNormal
  */
 
+/**
+ * Some constant definitions for the unicode normalization module.
+ *
+ * Note: these constants must all be resolvable at compile time by HipHop,
+ * since this file will not be executed during request startup for a compiled
+ * MediaWiki.
+ *
+ * @ingroup UtfNormal
+ */
 class Constants {
 	public const UNICODE_HANGUL_FIRST = 0xac00;
 	public const UNICODE_HANGUL_LAST = 0xd7a3;

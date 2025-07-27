@@ -2,9 +2,6 @@
 use UtfNormal\Validator;
 
 /**
- * Runs the UTF-8 decoder test at:
- * http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
- *
  * Copyright © 2004 Brion Vibber <brion@pobox.com>
  * https://www.mediawiki.org/
  *
@@ -24,9 +21,15 @@ use UtfNormal\Validator;
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
- * @ingroup UtfNormal
  */
 
+/**
+ * Runs the UTF-8 decoder test at:
+ * http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
+ *
+ * @ingroup UtfNormal
+ * @group UtfNormal
+ */
 class Utf8Test extends PHPUnit\Framework\TestCase {
 	public static function provideLines() {
 		$in = fopen( __DIR__ . '/data/UTF-8-test.txt', "rt" );
