@@ -652,9 +652,8 @@ class Validator {
 		$startChar = '';
 		$combining = '';
 
-		// Optim: ord() ignores everything after the first byte
-		$x1 = ord( Constants::UTF8_HANGUL_VBASE );
-		$x2 = ord( Constants::UTF8_HANGUL_TEND );
+		$x1 = ord( Constants::UTF8_HANGUL_VBASE[0] );
+		$x2 = ord( Constants::UTF8_HANGUL_TEND[0] );
 		for ( $i = 0; $i < $len; $i++ ) {
 			$c = $string[$i];
 			$n = ord( $c );
