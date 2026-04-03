@@ -1,4 +1,6 @@
 <?php
+declare( strict_types = 1 );
+
 /**
  * This script generates UniNormalData.inc from the Unicode Character Database
  * and supplementary files.

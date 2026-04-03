@@ -1,4 +1,6 @@
 <?php
+declare( strict_types = 1 );
+
 /**
  * Approximate benchmark for some basic operations.
  * Runs large chunks of text through cleanup with a lowish memory limit,
