@@ -6,7 +6,7 @@ declare( strict_types = 1 );
  * Runs large chunks of text through cleanup with a lowish memory limit,
  * to test regression on mem usage (bug 28146)
  *
- * Copyright © 2004-2011 Brion Vibber <brion@wikimedia.org>
+ * Copyright © 2004-2011 Brooke Vibber <bvibber@pobox.com>
  * https://www.mediawiki.org/
  *
  * This program is free software; you can redistribute it and/or modify

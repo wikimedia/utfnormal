@@ -5,8 +5,8 @@
 	"homepage": "https://www.mediawiki.org/wiki/utfnormal",
 	"authors": [
 		{
-			"name": "Brion Vibber",
-			"email": "bvibber@wikimedia.org"
+			"name": "Brooke Vibber",
+			"email": "bvibber@pobox.com"
 		}
 	],
 	"autoload": {

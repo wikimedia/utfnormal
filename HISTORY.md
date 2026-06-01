@@ -36,4 +36,4 @@
 * Ignore unnecessary files when exporting package (Kunal Mehta)
 
 ## 1.0.0 / 2015-03-06 ##
-* Initial release, split from MediaWiki (Brion Vibber & Kunal Mehta)
+* Initial release, split from MediaWiki (Brooke Vibber & Kunal Mehta)

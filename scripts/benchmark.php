@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 /**
  * Approximate benchmark for some basic operations.
  *
- * Copyright © 2004 Brion Vibber <brion@pobox.com>
+ * Copyright © 2004 Brooke Vibber <bvibber@pobox.com>
  * https://www.mediawiki.org/
  *
  * This program is free software; you can redistribute it and/or modify

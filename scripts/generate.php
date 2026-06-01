@@ -5,7 +5,7 @@ declare( strict_types = 1 );
  * This script generates UniNormalData.inc from the Unicode Character Database
  * and supplementary files.
  *
- * Copyright (C) 2004 Brion Vibber <brion@pobox.com>
+ * Copyright (C) 2004 Brooke Vibber <bvibber@pobox.com>
  * https://www.mediawiki.org/
  *
  * This program is free software; you can redistribute it and/or modify
