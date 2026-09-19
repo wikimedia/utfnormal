@@ -294,10 +294,10 @@ if ( $out ) {
  * @file
  */
 
-UtfNormal\Validator::\$utfCombiningClass = unserialize( '$serCombining' );
-UtfNormal\Validator::\$utfCanonicalComp = unserialize( '$serComp' );
-UtfNormal\Validator::\$utfCanonicalDecomp = unserialize( '$serCanon' );
-UtfNormal\Validator::\$utfCheckNFC = unserialize( '$serCheckNFC' );
+UtfNormal\Validator::\$utfCombiningClass = unserialize( '$serCombining', [ 'allowed_classes' => false ] );
+UtfNormal\Validator::\$utfCanonicalComp = unserialize( '$serComp', [ 'allowed_classes' => false ] );
+UtfNormal\Validator::\$utfCanonicalDecomp = unserialize( '$serCanon', [ 'allowed_classes' => false ] );
+UtfNormal\Validator::\$utfCheckNFC = unserialize( '$serCheckNFC', [ 'allowed_classes' => false ] );
 UtfNormal\Validator::\$utfIsolatedCombiningRegex = '$serIsoRegex';
 ";
 	fputs( $out, $outdata );
@@ -319,7 +319,7 @@ if ( $out ) {
  * @file
  */
 
-UtfNormal\Validator::\$utfCompatibilityDecomp = unserialize( '$serCompat' );
+UtfNormal\Validator::\$utfCompatibilityDecomp = unserialize( '$serCompat', [ 'allowed_classes' => false ] );
 ";
 	fputs( $out, $outdata );
 	fclose( $out );
