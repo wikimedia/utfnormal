@@ -53,7 +53,7 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 		}
 		fclose( $in );
 
-		return [ [ $testCases ] ];
+		return $testCases;
 	}
 
 	private function assertStringEquals( $a, $b, $desc ) {
@@ -104,22 +104,15 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * The data provider for this intentionally returns all the
-	 * test cases as one since PHPUnit is too slow otherwise
-	 *
 	 * @dataProvider provideNormalizationTest
 	 * @coversNothing
 	 */
-	public function testNormals( $testCases ) {
-		foreach ( $testCases as $case ) {
-			$c = $case[0];
-			$desc = $case[1];
-			$this->assertNFC( $c, $desc );
-			$this->assertNFD( $c, $desc );
-			$this->assertNFKC( $c, $desc );
-			$this->assertNFKD( $c, $desc );
-			$this->assertCleanUp( $c, $desc );
-		}
+	public function testNormals( $c, $desc ) {
+		$this->assertNFC( $c, $desc );
+		$this->assertNFD( $c, $desc );
+		$this->assertNFKC( $c, $desc );
+		$this->assertNFKD( $c, $desc );
+		$this->assertCleanUp( $c, $desc );
 	}
 
 	public static function provideUnicodeData() {
@@ -148,28 +141,21 @@ class UtfNormalTest extends PHPUnit\Framework\TestCase {
 		}
 		fclose( $in );
 
-		return [ [ $testCases ] ];
+		return $testCases;
 	}
 
 	/**
-	 * The data provider for this intentionally returns all the
-	 * test cases as one since PHPUnit is too slow otherwise
-	 *
 	 * @depends testNormals
 	 * @dataProvider provideUnicodeData
 	 * @coversNothing
 	 */
-	public function testInvariant( $testCases ) {
-		foreach ( $testCases as $case ) {
-			$char = $case[0];
-			$desc = $case[1];
-			$this->assertStringEquals( $char, Validator::toNFC( $char ), $desc );
-			$this->assertStringEquals( $char, Validator::toNFD( $char ), $desc );
-			$this->assertStringEquals( $char, Validator::toNFKC( $char ), $desc );
-			$this->assertStringEquals( $char, Validator::toNFKD( $char ), $desc );
-			# See ::assertCleanUp -- prefix with space to ensure combining
-			# characters have a preceding base.
-			$this->assertStringEquals( " $char", Validator::cleanUp( " $char" ), $desc );
-		}
+	public function testInvariant( $char, $desc ) {
+		$this->assertStringEquals( $char, Validator::toNFC( $char ), $desc );
+		$this->assertStringEquals( $char, Validator::toNFD( $char ), $desc );
+		$this->assertStringEquals( $char, Validator::toNFKC( $char ), $desc );
+		$this->assertStringEquals( $char, Validator::toNFKD( $char ), $desc );
+		# See ::assertCleanUp -- prefix with space to ensure combining
+		# characters have a preceding base.
+		$this->assertStringEquals( " $char", Validator::cleanUp( " $char" ), $desc );
 	}
 }
