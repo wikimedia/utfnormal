@@ -24,4 +24,7 @@
 			<directory>./tests</directory>
 		</testsuite>
 	</testsuites>
+	<php>
+		<const name="PHPUNIT_UTFNORMAL_TESTSUITE" value="true"/>
+	</php>
 </phpunit>

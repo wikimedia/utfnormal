@@ -18,7 +18,7 @@ use Normalizer;
  * @defgroup UtfNormal UtfNormal
  */
 
-define( 'NORMALIZE_INTL', function_exists( 'normalizer_normalize' ) );
+define( 'NORMALIZE_INTL', function_exists( 'normalizer_normalize' ) && !defined( 'PHPUNIT_UTFNORMAL_TESTSUITE' ) );
 
 /**
  * Unicode normalization routines for working with UTF-8 strings.
