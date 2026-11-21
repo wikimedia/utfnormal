@@ -10,9 +10,9 @@
 		}
 	],
 	"autoload": {
-		"classmap": [
-			"src/"
-		]
+		"psr-4": {
+			"UtfNormal\\": "src/"
+		}
 	},
 	"require": {
 		"php": ">=8.3",
